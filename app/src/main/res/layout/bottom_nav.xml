@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:tabTextColor="@drawable/item_selected"-->
+<!--        app:tabIndicatorAnimationMode="elastic"-->
+<!--        app:tabMode="fixed"-->
+<!--        app:tabIconTint="@drawable/item_selected"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/frame" >-->
+
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/homeBottomBtn"-->
+<!--            android:background="@drawable/item_selected"-->
+<!--            android:text="Home"-->
+<!--            android:icon="@drawable/home_btn" />-->
+
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/locationBottomBtn"-->
+<!--            android:background="@drawable/item_selected"-->
+<!--            android:text="Map"-->
+<!--            android:icon="@drawable/location_btn" />-->
+
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/chatBottomBtn"-->
+<!--            android:background="@drawable/item_selected"-->
+<!--            android:text="Chat"-->
+<!--            android:icon="@drawable/chat_btn" />-->
+
+<!--        <com.google.android.material.tabs.TabItem-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:id="@+id/profileBottomBtn"-->
+<!--            android:background="@drawable/item_selected"-->
+<!--            android:text="Profile"-->
+<!--            android:icon="@drawable/profile_btn" />-->
+<!--    </com.google.android.material.tabs.TabLayout>-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:id="@+id/view"
+        android:background="@drawable/shadow"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_55sdp"
+            android:background="@color/white"
+            app:itemTextColor="@drawable/item_selected"
+            app:itemIconTint="@drawable/item_selected"
+            app:menu="@menu/bottom_menu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+</LinearLayout>

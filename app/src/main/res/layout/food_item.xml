@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="@dimen/_5sdp"
+    app:cardCornerRadius="@dimen/_5sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="@dimen/_65sdp"
+            android:layout_height="@dimen/_65sdp"
+            android:id="@+id/itemFoodImg"
+            android:src="@drawable/donation"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="@dimen/_5sdp">
+
+            <TextView
+                android:id="@+id/itemFoodName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/food_name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_13sdp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:id="@+id/itemDonorProfileImg"
+                    android:src="@drawable/profile_btn"
+                    android:background="@color/transparent" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/itemDonorProfileName"
+                    android:singleLine="true"
+                    android:layout_weight="1"
+                    android:text="@string/name"
+                    android:textAppearance="@style/FoodItemTextStyle"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/itemRateCount"
+                    android:textAppearance="@style/FoodItemTextStyle"
+                    android:text="4.3"
+                    app:drawableRightCompat="@drawable/star_icon" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="@dimen/_17sdp"
+                    android:layout_height="@dimen/_17sdp"
+                    android:src="@drawable/location_btn"
+                    android:background="@color/transparent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/itemDonorNearbyLoc"
+                    android:singleLine="true"
+                    android:text="@string/map"
+                    android:textAppearance="@style/FoodItemTextStyle"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/itemDonateDate"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:textAppearance="@style/FoodItemTextStyle"
+                    android:text="@string/date"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</com.google.android.material.card.MaterialCardView>

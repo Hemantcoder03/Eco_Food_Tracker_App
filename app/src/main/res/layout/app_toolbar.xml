@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_horizontal">
+
+    <ImageButton
+        android:id="@+id/toolbarProfileBtn"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:backgroundTint="@color/transparent"
+        android:src="@drawable/profile_btn" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_50sdp"
+        android:id="@+id/toolbarTitle"
+        android:padding="@dimen/_2sdp"
+        android:layout_weight="1"
+        android:textSize="@dimen/_20sdp"
+        android:gravity="center|start"
+        android:text="@string/hello_user"/>
+
+    <ImageButton
+        android:id="@+id/openCloseNavBtn"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_gravity="end"
+        android:backgroundTint="@color/transparent"
+        android:src="@drawable/menu_icon" />
+
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/white">-->
+
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="@dimen/_50sdp"-->
+<!--            android:visibility="gone"></androidx.appcompat.widget.Toolbar>-->
+
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+</LinearLayout>

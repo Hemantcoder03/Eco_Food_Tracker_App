@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "150655209027",
+    "firebase_url": "https://ecofood-tracker-app-default-rtdb.firebaseio.com",
+    "project_id": "ecofood-tracker-app",
+    "storage_bucket": "ecofood-tracker-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150655209027:android:3dea8eaddc723340c68ef6",
+        "android_client_info": {
+          "package_name": "com.hemant.ecofoodtrackerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150655209027-1iso8d4eaua943a410dd7n3tu1mjfjhl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hemant.ecofoodtrackerapp",
+            "certificate_hash": "6ef1348e8e1768863f1ccbe87df04319254b9958"
+          }
+        },
+        {
+          "client_id": "150655209027-p3nvjgale11l7ubtqi9g17okan122b45.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbXrxF68-_qP-9yETjGHw9TGkFt4JqU6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150655209027-p3nvjgale11l7ubtqi9g17okan122b45.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

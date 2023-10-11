@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Eco Food Tracker App</string>
+    <string name="home">Home</string>
+    <string name="map">Map</string>
+    <string name="chat">Chat</string>
+    <string name="profile">Profile</string>
+    <string name="open">Open Navigation Bar</string>
+    <string name="close">Close Navigation Bar</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="nav_header">Live, love, eat</string>
+    <string name="hello_user">Hello, User</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_here">Search here</string>
+    <string name="food_name">Food Name</string>
+    <string name="name">Name</string>
+    <string name="date">Date</string>
+    <string name="logout">logout</string>
+    <string name="register">Register</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="or_register_with">or register with</string>
+    <string name="get_food">Get Food</string>
+    <string name="login">Login</string>
+    <string name="or_login_with">or login with</string>
+    <string name="default_web_client_id">150655209027-1iso8d4eaua943a410dd7n3tu1mjfjhl.apps.googleusercontent.com</string>   //It is key from firebase for authentication
+    <string name="already_a_member">Already a Member?</string>
+    <string name="not_a_member">Not Member?</string>
+    <string name="create_new_account">Create account</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="General">
+        <menu>
+            <item
+                android:id="@+id/home"
+                android:title="Home"
+                android:icon="@drawable/home_btn"/>
+            <item
+                android:id="@+id/map"
+                android:title="Map"
+                android:icon="@drawable/location_btn"/>
+            <item
+                android:id="@+id/chat"
+                android:title="Chat"
+                android:icon="@drawable/chat_btn"/>
+            <item
+                android:id="@+id/profile"
+                android:title="Profile"
+                android:icon="@drawable/profile_btn"/>
+        </menu>
+    </item>
+
+    <item android:title="Help">
+        <menu>
+            <item
+                android:id="@+id/helpSupport"
+                android:title="Help and support"
+                android:icon="@drawable/home_btn"/>
+            <item
+                android:id="@+id/theme"
+                android:title="Theme"
+                android:icon="@drawable/location_btn"/>
+        </menu>
+    </item>
+
+</menu>
