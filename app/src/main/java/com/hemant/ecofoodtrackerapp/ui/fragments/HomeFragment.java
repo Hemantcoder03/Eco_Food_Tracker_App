@@ -1,8 +1,10 @@
-package com.hemant.ecofoodtrackerapp.fragments;
+package com.hemant.ecofoodtrackerapp.ui.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,33 +14,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.hemant.ecofoodtrackerapp.R;;
+import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.adapters.FoodListAdapter;
-import com.hemant.ecofoodtrackerapp.models.FoodData;
+import com.hemant.ecofoodtrackerapp.models.FoodDataModel;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
+;
 
 public class HomeFragment extends Fragment {
 
@@ -47,10 +35,10 @@ public class HomeFragment extends Fragment {
     SearchView searchFood;
     ImageButton searchFilterBtn;
     RecyclerView foodListRV;
-    ArrayList<FoodData> foodDataList;
+    ArrayList<FoodDataModel> foodDataList;
     FoodListAdapter foodListAdapter;
     SwipeRefreshLayout refreshBar;
-//    ProgressBar progressBar;
+    //    ProgressBar progressBar;
     LottieAnimationView loadingAnimation;
 
     public HomeFragment() {
@@ -61,6 +49,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
 
         // Inflate the layout for this fragment
         return view;
@@ -84,9 +73,9 @@ public class HomeFragment extends Fragment {
         loadingAnimation.setVisibility(View.VISIBLE);
         loadingAnimation.playAnimation();
 
-        FirebaseRecyclerOptions<FoodData> options =
-                new FirebaseRecyclerOptions.Builder<FoodData>()
-                        .setQuery(ref.child("FoodList"), FoodData.class)
+        FirebaseRecyclerOptions<FoodDataModel> options =
+                new FirebaseRecyclerOptions.Builder<FoodDataModel>()
+                        .setQuery(ref.child("FoodList"), FoodDataModel.class)
                         .build();
 
         foodDataList = new ArrayList<>();
@@ -95,8 +84,6 @@ public class HomeFragment extends Fragment {
         refreshBar.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                clearList();
-//                foodDataList = retrieveFoods();
 
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
@@ -110,7 +97,7 @@ public class HomeFragment extends Fragment {
                 refreshBar.setRefreshing(false);
             }
         });
-//        foodListAdapter = new FoodListAdapter(foodDataList, requireContext());
+
         foodListAdapter = new FoodListAdapter(options);
         foodListRV.setAdapter(foodListAdapter);
 
@@ -120,7 +107,7 @@ public class HomeFragment extends Fragment {
             public void run() {
                 checkVisibility();
             }
-        }, 0,100);
+        }, 0, 10);
 
     }
 
@@ -133,17 +120,19 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+        foodListAdapter.startListening();
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 checkVisibility();
             }
-        }, 0,100);
+        }, 0, 10);
         foodListAdapter.reloadAdapter();
     }
 
-    public void checkVisibility(){
+    public void checkVisibility() {
         if (foodListAdapter.getSnapshots().isEmpty()) {
 //            progressBar.setVisibility(View.VISIBLE);
             loadingAnimation.setVisibility(View.VISIBLE);
@@ -157,7 +146,6 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         foodListAdapter.startListening();
-        onResume();
     }
 
     @Override

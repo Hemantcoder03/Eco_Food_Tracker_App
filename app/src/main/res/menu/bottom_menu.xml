@@ -18,6 +18,11 @@
         android:icon="@drawable/chat_btn"/>
 
     <item
+        android:title="@string/cart"
+        android:id="@+id/cartBottomBtn"
+        android:icon="@drawable/cart_btn" />
+
+    <item
         android:title="@string/profile"
         android:id="@+id/profileBottomBtn"
         android:icon="@drawable/profile_btn" />

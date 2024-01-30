@@ -15,51 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <com.google.android.material.tabs.TabLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:tabTextColor="@drawable/item_selected"-->
-<!--        app:tabIndicatorAnimationMode="elastic"-->
-<!--        app:tabMode="fixed"-->
-<!--        app:tabIconTint="@drawable/item_selected"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/frame" >-->
-
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/homeBottomBtn"-->
-<!--            android:background="@drawable/item_selected"-->
-<!--            android:text="Home"-->
-<!--            android:icon="@drawable/home_btn" />-->
-
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/locationBottomBtn"-->
-<!--            android:background="@drawable/item_selected"-->
-<!--            android:text="Map"-->
-<!--            android:icon="@drawable/location_btn" />-->
-
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/chatBottomBtn"-->
-<!--            android:background="@drawable/item_selected"-->
-<!--            android:text="Chat"-->
-<!--            android:icon="@drawable/chat_btn" />-->
-
-<!--        <com.google.android.material.tabs.TabItem-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/profileBottomBtn"-->
-<!--            android:background="@drawable/item_selected"-->
-<!--            android:text="Profile"-->
-<!--            android:icon="@drawable/profile_btn" />-->
-<!--    </com.google.android.material.tabs.TabLayout>-->
-
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"

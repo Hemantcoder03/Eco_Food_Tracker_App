@@ -1,25 +1,17 @@
 package com.hemant.ecofoodtrackerapp.adapters;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.hemant.ecofoodtrackerapp.R;
-import com.hemant.ecofoodtrackerapp.models.FoodData;
-
-import java.util.ArrayList;
+import com.hemant.ecofoodtrackerapp.models.FoodDataModel;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -78,14 +70,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 
-public class FoodListAdapter extends FirebaseRecyclerAdapter<FoodData, FoodListAdapter.MyViewHolder> {
+public class FoodListAdapter extends FirebaseRecyclerAdapter<FoodDataModel, FoodListAdapter.MyViewHolder> {
 
-    public FoodListAdapter(@NonNull FirebaseRecyclerOptions<FoodData> options) {
+    public FoodListAdapter(@NonNull FirebaseRecyclerOptions<FoodDataModel> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull FoodData model) {
+    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull FoodDataModel model) {
 
         holder.itemFoodName.setText(model.getItemFoodName());
         holder.itemDonorProfileName.setText(model.getItemDonorProfileName());

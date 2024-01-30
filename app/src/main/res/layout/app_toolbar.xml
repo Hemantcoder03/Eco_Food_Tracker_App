@@ -21,7 +21,7 @@
         android:layout_weight="1"
         android:textSize="@dimen/_20sdp"
         android:gravity="center|start"
-        android:text="@string/hello_user"/>
+        android:text="@string/hello"/>
 
     <ImageButton
         android:id="@+id/openCloseNavBtn"

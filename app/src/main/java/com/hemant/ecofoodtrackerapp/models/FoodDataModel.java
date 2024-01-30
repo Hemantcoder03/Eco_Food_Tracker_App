@@ -1,13 +1,13 @@
 package com.hemant.ecofoodtrackerapp.models;
 
-public class FoodData {
+public class FoodDataModel {
 
     String itemFoodName, itemDonorProfileName, itemDonorNearbyLoc, itemDonateDate, itemRateCount, itemDonorProfileImg;
 
     //It is required otherwise arises problem for fetch data
-    public FoodData(){}
+    public FoodDataModel(){}
 
-    public FoodData(String itemFoodName, String itemDonorProfileName, String itemDonorNearbyLoc, String itemDonateDate, String itemRateCount, String itemDonorProfileImg) {
+    public FoodDataModel(String itemFoodName, String itemDonorProfileName, String itemDonorNearbyLoc, String itemDonateDate, String itemRateCount, String itemDonorProfileImg) {
         this.itemFoodName = itemFoodName;
         this.itemDonorProfileName = itemDonorProfileName;
         this.itemDonorNearbyLoc = itemDonorNearbyLoc;

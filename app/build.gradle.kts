@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.com.fasterxml.jackson.core.JsonPointer.compile
+
 plugins {
     id("com.android.application")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
@@ -6,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.hemant.ecofoodtrackerapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.hemant.ecofoodtrackerapp"
@@ -43,13 +45,16 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.gms:play-services-maps:18.1.0")
     implementation("com.android.car.ui:car-ui-lib:2.5.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-fragment:2.7.6")
+    implementation("androidx.navigation:navigation-ui:2.7.6")
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.firebaseui:firebase-ui-firestore:8.0.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-
-    //dependency for splash screen
-//    implementation("com.rbddevs.splashy:splashy:1.3.0")
-//    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72+")
 
     //it is used for make app responsive
     implementation("com.intuit.sdp:sdp-android:1.1.0")
@@ -76,4 +81,10 @@ dependencies {
 
     // Add the dependency for the Firebase Authentication library
     implementation("com.google.firebase:firebase-auth")
+
+    //to resolve the error of checkDebugDuplicateClasses
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
+
+    //picasso library for set image to ImageView
+    implementation("com.squareup.picasso:picasso:2.8")
 }

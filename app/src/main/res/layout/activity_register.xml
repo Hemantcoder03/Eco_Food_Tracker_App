@@ -7,7 +7,7 @@
     android:background="@drawable/background_image"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ui.RegisterActivity">
+    tools:context=".ui.activities.RegisterActivity">
 
     <ImageView
         android:layout_width="match_parent"
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/regUsername"
                     android:singleLine="true"
-                    android:hint="@string/enter_your_name" />
+                    android:hint="@string/enter_name" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/regEmail"
                     android:singleLine="true"
-                    android:hint="@string/enter_your_email" />
+                    android:hint="@string/enter_email" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/regPassword"
                     android:singleLine="true"
-                    android:hint="@string/enter_your_password" />
+                    android:hint="@string/enter_password" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton

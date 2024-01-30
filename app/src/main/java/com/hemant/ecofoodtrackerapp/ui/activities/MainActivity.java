@@ -1,4 +1,11 @@
-package com.hemant.ecofoodtrackerapp.ui;
+package com.hemant.ecofoodtrackerapp.ui.activities;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -7,48 +14,48 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.hemant.ecofoodtrackerapp.R;
-import com.hemant.ecofoodtrackerapp.fragments.ChatsFragment;
-import com.hemant.ecofoodtrackerapp.fragments.HomeFragment;
-import com.hemant.ecofoodtrackerapp.fragments.MapFragment;
-import com.hemant.ecofoodtrackerapp.fragments.ProfileFragment;
+import com.hemant.ecofoodtrackerapp.databinding.ActivityMainBinding;
+import com.hemant.ecofoodtrackerapp.models.UserDataModel;
+import com.hemant.ecofoodtrackerapp.ui.fragments.CartFragment;
+import com.hemant.ecofoodtrackerapp.ui.fragments.ChatsFragment;
+import com.hemant.ecofoodtrackerapp.ui.fragments.HomeFragment;
+import com.hemant.ecofoodtrackerapp.ui.fragments.MapFragment;
+import com.hemant.ecofoodtrackerapp.ui.fragments.ProfileFragment;
+import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
+import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNav;
-//    Toolbar toolbar;
     ImageButton openCloseNavBtn;
     DrawerLayout drawerLayout;
-    NavigationView sideNav;
+    ActivityMainBinding binding;
+    TextView toolbarTitle;
+    FirebaseAuth mAuth;
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        bottomNav = findViewById(R.id.bottomNav);
-//        toolbar = findViewById(R.id.toolbar);
+        mAuth = FirebaseAuth.getInstance();
+        sharedPref = getSharedPreferences("My_Pref",0);
+
         openCloseNavBtn = findViewById(R.id.openCloseNavBtn);
-        drawerLayout = findViewById(R.id.drawerLayout);
-        sideNav = findViewById(R.id.sideNav);
+        bottomNav = findViewById(R.id.bottomNav);
+        toolbarTitle = findViewById(R.id.toolbarTitle);
 
-        //set the toolbar
-//        setSupportActionBar(toolbar);
-
-        //set navigation view with toolbar
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
-//        drawerLayout.addDrawerListener(toggle);
-//        toggle.syncState();
+        setUserName();
 
         //set side navigation bar item selected listener
-        sideNav.setNavigationItemSelectedListener(item -> {
+        binding.sideNav.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
             if (id == R.id.home) {
@@ -70,11 +77,11 @@ public class MainActivity extends AppCompatActivity {
         openCloseNavBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-                    drawerLayout.closeDrawer(GravityCompat.START);
+                if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+                    binding.drawerLayout.closeDrawer(GravityCompat.START);
                 }
                 else{
-                    drawerLayout.openDrawer(GravityCompat.START);
+                    binding.drawerLayout.openDrawer(GravityCompat.START);
                 }
             }
         });
@@ -85,19 +92,18 @@ public class MainActivity extends AppCompatActivity {
             int id = item.getItemId();
 
             if(id == R.id.homeBottomBtn){
-                Toast.makeText(MainActivity.this, "Home",Toast.LENGTH_SHORT).show();
                 loadFragment(new HomeFragment(), false);
             }
             else if(id == R.id.mapBottomBtn){
-                Toast.makeText(MainActivity.this, "Map",Toast.LENGTH_SHORT).show();
                 loadFragment(new MapFragment(), false);
             }
             else if(id == R.id.chatBottomBtn){
-                Toast.makeText(MainActivity.this, "chat",Toast.LENGTH_SHORT).show();
                 loadFragment(new ChatsFragment(), false);
             }
+            else if(id == R.id.cartBottomBtn){
+                loadFragment(new CartFragment(), false);
+            }
             else if(id == R.id.profileBottomBtn){
-                Toast.makeText(MainActivity.this, "Profile",Toast.LENGTH_SHORT).show();
                 loadFragment(new ProfileFragment(), false);
             }
             return true;
@@ -118,18 +124,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadFragment(Fragment fragment, boolean flag){
-        FragmentManager fm=getSupportFragmentManager();
-        FragmentTransaction ft=fm.beginTransaction();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
         if(flag) {
             ft.add(R.id.frame, fragment);
         }else {
             ft.replace(R.id.frame,fragment);
-            ft.commit();
         }
+        ft.commit();
 
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
         }
+    }
+
+    private void setUserName(){
+        FirebaseUtil.getCurrentUserDetails().get().addOnCompleteListener(v ->{
+
+            if(v.isSuccessful()){
+                UserDataModel user = v.getResult().toObject(UserDataModel.class);
+                String userName = Objects.requireNonNull(user).getUserName();
+                if(userName.length() > 10){
+                    toolbarTitle.setText(getString(R.string.hello)+" "+userName.substring(0,10)+"...");
+                }
+                else {
+                    toolbarTitle.setText(getString(R.string.hello)+" "+userName);
+                }
+            }
+            else{
+                AndroidUtil.setToast(this, "Please check your internet connection");
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }
 

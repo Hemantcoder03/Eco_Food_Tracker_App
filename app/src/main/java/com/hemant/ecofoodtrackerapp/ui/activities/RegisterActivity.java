@@ -1,18 +1,18 @@
-package com.hemant.ecofoodtrackerapp.ui;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+package com.hemant.ecofoodtrackerapp.ui.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,12 +22,16 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hemant.ecofoodtrackerapp.R;
+import com.hemant.ecofoodtrackerapp.models.UserDataModel;
+import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 
 import java.util.regex.Pattern;
 
@@ -45,11 +49,16 @@ public class RegisterActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     String userName,userEmail,userPassword;
     ProgressBar regProgressBar;
+    FirebaseFirestore db;
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        sharedPref = getSharedPreferences("My_Pref",0);
+        SharedPreferences.Editor editor = sharedPref.edit();
 
         regUsername = findViewById(R.id.regUsername);
         regEmail = findViewById(R.id.regEmail);
@@ -59,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
         regGoogleBtn = findViewById(R.id.regGoogleBtn);
         regProgressBar = findViewById(R.id.regProgressBar);
 
+        db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
         //google authentication
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -89,6 +99,10 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
                                         regProgressBar.setVisibility(View.GONE);
+
+                                        //save to firebase
+                                        saveToDB(userName, userEmail);
+
                                         Toast.makeText(RegisterActivity.this, "Registration Successfully", Toast.LENGTH_SHORT).show();
                                         Intent i = new Intent(RegisterActivity.this, MainActivity.class);
                                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -169,6 +183,10 @@ public class RegisterActivity extends AppCompatActivity {
                             regProgressBar.setVisibility(View.GONE);
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //save to firebase
+                            saveToDB(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail());
+
                             Intent i = new Intent(RegisterActivity.this, MainActivity.class);
                             Toast.makeText(RegisterActivity.this, "Registration successfully", Toast.LENGTH_SHORT).show();
                             startActivity(i);
@@ -191,4 +209,45 @@ public class RegisterActivity extends AppCompatActivity {
         //It used default email address validation
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
+
+    private void saveToDB(String name, String email){
+
+        sharedPref = getSharedPreferences("My_Pref",0)  ;
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("userEmail",email);
+        editor.putString("userName",name);
+        editor.apply();
+
+        FirebaseUtil.setCurrentUserDetails(new UserDataModel(name,email,FirebaseUtil.getCurrentUserId(),"","",Timestamp.now()));
+
+//        CollectionReference ref = db.collection("Receivers");
+//        ref.add(new ReceiverData(name,email,password)).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentReference> task) {
+//                if (task.isSuccessful()){
+//                    Toast.makeText(RegisterActivity.this, "Successful", Toast.LENGTH_SHORT).show();
+//                }
+//                else{
+//                    Toast.makeText(RegisterActivity.this, "failed", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+    }
+
+//    private void saveToFirebase(){
+//        FirebaseUtil.getCurrentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if(task.isSuccessful()){
+//                    UserData user = task.getResult().toObject(UserData.class);
+//                    if(user != null){
+//
+//                    }
+//                }
+//                else{
+//
+//                }
+//            }
+//        });
+//    }
 }

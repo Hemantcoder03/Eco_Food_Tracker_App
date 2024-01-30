@@ -1,8 +1,4 @@
-package com.hemant.ecofoodtrackerapp.ui;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+package com.hemant.ecofoodtrackerapp.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +8,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -35,14 +35,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class LoginActivity extends AppCompatActivity {
 
     private static final int REQ_ONE_TAP = 101;
-    TextInputEditText  loginEmail, loginPassword;
+    TextInputEditText loginEmail, loginPassword;
     Button loginBtn;
     TextView createNewAccountText;
     CircleImageView loginGoogleBtn;
     FirebaseAuth mAuth;     //firebase auth object which can used to check authentication
     GoogleSignInClient googleClient;
     GoogleSignInOptions gso;
-    String userEmail,userPassword;
+    String userEmail, userPassword;
     ProgressBar loginProgressBar;
 
     @Override
@@ -82,36 +82,39 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginBtn.setOnClickListener(new View.OnClickListener(){
+        loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginProgressBar.setVisibility(View.VISIBLE);
-                userEmail = loginEmail.getText().toString();
-                userPassword = loginPassword.getText().toString();
-                if(userEmail.isEmpty() || userPassword.isEmpty()){
+                userEmail = String.valueOf(loginEmail.getText());
+                userPassword = String.valueOf(loginPassword.getText());
+                if (userEmail.isEmpty() || userPassword.isEmpty()) {
                     loginProgressBar.setVisibility(View.GONE);
                     Toast.makeText(LoginActivity.this, "Enter valid Details", Toast.LENGTH_SHORT).show();
-                }
-                else if(!isValidEmail(userEmail) || !isValidPassword(userPassword)){
+                } else if (!isValidEmail(userEmail) || !isValidPassword(userPassword)) {
                     loginProgressBar.setVisibility(View.GONE);
                     Toast.makeText(LoginActivity.this, "Please enter valid email or password", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    mAuth.createUserWithEmailAndPassword(userEmail,userPassword)
+                } else {
+                    mAuth.signInWithEmailAndPassword(userEmail, userPassword)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         loginProgressBar.setVisibility(View.GONE);
-                                        Toast.makeText(LoginActivity.this, "Registration Successfully", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
                                         Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(i);
                                         finish();
-                                    }
-                                    else{
+                                    } else {
                                         loginProgressBar.setVisibility(View.GONE);
-                                        Toast.makeText(LoginActivity.this, "User Already Registered", Toast.LENGTH_SHORT).show();
+
+                                        if(task.getException().getMessage().contains("INVALID_LOGIN_CREDENTIALS")){
+                                            Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else if(task.getException().getMessage().contains("USER_NOT_FOUND")){
+                                            Toast.makeText(LoginActivity.this, "User Not Registered", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
                             });
@@ -186,8 +189,9 @@ public class LoginActivity extends AppCompatActivity {
         return pattern.matcher(password).matches();
     }
 
-    private Boolean isValidEmail(String email){
+    private Boolean isValidEmail(String email) {
         //It used default email address validation
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
+
 }

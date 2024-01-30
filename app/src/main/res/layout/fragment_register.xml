@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragments.RegisterFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="@dimen/_95sdp"
+            android:layout_height="@dimen/_95sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/food_logo"/>
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/app_name"
+            android:textSize="@dimen/_25sdp"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/deliver_happiness_along_with_food"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="@+id/textView10"
+            app:layout_constraintStart_toStartOf="@+id/textView10"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/sign_up_here"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="@+id/textView11"
+            app:layout_constraintStart_toStartOf="@+id/textView11"
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+<!--        <EditText-->
+<!--            android:id="@+id/registerName"-->
+<!--            android:layout_width="@dimen/_250sdp"-->
+<!--            android:layout_height="@dimen/_45sdp"-->
+<!--            android:layout_marginTop="@dimen/_13sdp"-->
+<!--            android:background="@drawable/edittext_background"-->
+<!--            android:drawableStart="@drawable/profile_btn"-->
+<!--            android:drawablePadding="@dimen/_13sdp"-->
+<!--            android:elevation="@dimen/_4sdp"-->
+<!--            android:ems="10"-->
+<!--            android:hint="@string/name"-->
+<!--            android:inputType="text"-->
+<!--            android:paddingStart="@dimen/_13sdp"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/textView13"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/textView13"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textView13" />-->
+
+        <EditText
+            android:id="@+id/registerEmail"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:background="@drawable/edittext_background"
+            android:drawableStart="@drawable/email"
+            android:drawablePadding="@dimen/_13sdp"
+            android:elevation="@dimen/_8sdp"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingStart="@dimen/_13sdp"
+            android:paddingEnd="@dimen/_13sdp"
+            app:layout_constraintEnd_toEndOf="@+id/textView13"
+            app:layout_constraintStart_toStartOf="@+id/textView13"
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+        <EditText
+            android:id="@+id/registerPassword"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:background="@drawable/edittext_background"
+            android:drawableStart="@drawable/password"
+            android:drawablePadding="@dimen/_13sdp"
+            android:elevation="@dimen/_8sdp"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingStart="@dimen/_13sdp"
+            android:paddingEnd="@dimen/_13sdp"
+            app:layout_constraintEnd_toEndOf="@+id/registerEmail"
+            app:layout_constraintStart_toStartOf="@+id/registerEmail"
+            app:layout_constraintTop_toBottomOf="@+id/registerEmail"/>
+
+        <EditText
+            android:id="@+id/registerConfirmPassword"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:background="@drawable/edittext_background"
+            android:drawableStart="@drawable/password"
+            android:drawablePadding="@dimen/_13sdp"
+            android:elevation="@dimen/_8sdp"
+            android:ems="10"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
+            android:paddingStart="@dimen/_13sdp"
+            android:paddingEnd="@dimen/_13sdp"
+            app:layout_constraintEnd_toEndOf="@+id/registerPassword"
+            app:layout_constraintStart_toStartOf="@+id/registerPassword"
+            app:layout_constraintTop_toBottomOf="@+id/registerPassword" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/registerBtn"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:background="@drawable/green_btn_background"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/register"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registerConfirmPassword" />
+
+        <TextView
+            android:id="@+id/alreadyAccountBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/already_have_an_account"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintEnd_toEndOf="@+id/registerBtn"
+            app:layout_constraintStart_toStartOf="@+id/registerBtn"
+            app:layout_constraintTop_toBottomOf="@+id/registerBtn" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/registerGoogleBtn"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:background="@drawable/white_background"
+            android:drawableStart="@drawable/google_icon"
+            android:elevation="@dimen/_8sdp"
+            android:paddingStart="@dimen/_13sdp"
+            android:text="@string/google"
+            app:layout_constraintStart_toStartOf="@+id/alreadyAccountBtn"
+            app:layout_constraintTop_toBottomOf="@+id/alreadyAccountBtn"
+            app:layout_constraintEnd_toEndOf="@+id/alreadyAccountBtn"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="@dimen/_100sdp"
+            android:id="@+id/registerLoadingBar"
+            android:visibility="gone"
+            app:lottie_rawRes="@raw/loading_bar"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
