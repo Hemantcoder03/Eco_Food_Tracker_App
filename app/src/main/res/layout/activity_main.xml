@@ -10,16 +10,7 @@
     tools:ignore="SpeakableTextPresentCheck"
     tools:openDrawer="start">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include layout="@layout/app_toolbar"/>
-
-        <include layout="@layout/bottom_nav"/>
-
-    </LinearLayout>
+    <include layout="@layout/main_page_layout"/>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/sideNav"

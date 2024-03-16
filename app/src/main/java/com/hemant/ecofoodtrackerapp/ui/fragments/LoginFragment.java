@@ -51,7 +51,7 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = FragmentLoginBinding.inflate(inflater,container,false);
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
         view = binding.getRoot();
 
         mAuth = FirebaseAuth.getInstance();
@@ -62,8 +62,12 @@ public class LoginFragment extends Fragment {
                 .build();
         googleClient = GoogleSignIn.getClient(requireActivity(), gso);
 
-        binding.register.setOnClickListener(v ->{
+        binding.register.setOnClickListener(v -> {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_registerFragment);
+        });
+
+        binding.loginForgetPassword.setOnClickListener(v -> {
+            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_forgotPasswordFragment);
         });
 
         binding.loginGoogleBtn.setOnClickListener(new View.OnClickListener() {
@@ -83,30 +87,26 @@ public class LoginFragment extends Fragment {
                 userPassword = String.valueOf(binding.loginPassword.getText());
                 if (userEmail.isEmpty()) {
                     hideLoadingBar();
-                    AndroidUtil.setToast(requireActivity(),"Enter valid Details");
+                    AndroidUtil.setToast(requireActivity(), "Enter valid Details");
                     binding.loginEmail.setError("Please enter email");
-                }
-                else if(userPassword.isEmpty()){
+                } else if (userPassword.isEmpty()) {
                     hideLoadingBar();
-                    AndroidUtil.setToast(requireActivity(),"Enter valid Details");
+                    AndroidUtil.setToast(requireActivity(), "Enter valid Details");
                     binding.loginPassword.setError("Please enter password");
-                }
-                else if (!isValidEmail(userEmail)) {
+                } else if (!isValidEmail(userEmail)) {
                     hideLoadingBar();
                     binding.loginEmail.setError("Please enter valid email\nE.g. Abc@gmail.com");
-                }
-                else if(!isValidPassword(userPassword)){
+                } else if (!isValidPassword(userPassword)) {
                     hideLoadingBar();
                     binding.loginPassword.setError("Please enter valid password\nE.g. Abc@123");
-                }
-                else {
+                } else {
                     mAuth.signInWithEmailAndPassword(userEmail, userPassword)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         hideLoadingBar();
-                                        AndroidUtil.setToast(requireActivity(),"Login Successfully");
+                                        AndroidUtil.setToast(requireActivity(), "Login Successfully");
                                         Intent i = new Intent(requireActivity(), MainActivity.class);
                                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(i);
@@ -114,11 +114,10 @@ public class LoginFragment extends Fragment {
                                     } else {
                                         hideLoadingBar();
 
-                                        if(Objects.requireNonNull(task.getException().getMessage()).contains("INVALID_LOGIN_CREDENTIALS")){
-                                            AndroidUtil.setToast(requireActivity(),"Invalid email or password");
-                                        }
-                                        else if(task.getException().getMessage().contains("USER_NOT_FOUND")){
-                                            AndroidUtil.setToast(requireActivity(),"User Not Registered");
+                                        if (Objects.requireNonNull(task.getException().getMessage()).contains("INVALID_LOGIN_CREDENTIALS")) {
+                                            AndroidUtil.setToast(requireActivity(), "Invalid email or password");
+                                        } else if (task.getException().getMessage().contains("USER_NOT_FOUND")) {
+                                            AndroidUtil.setToast(requireActivity(), "User Not Registered");
                                         }
                                     }
                                 }
@@ -135,6 +134,7 @@ public class LoginFragment extends Fragment {
     private void signIn() {
         hideLoadingBar();
         Intent intent = googleClient.getSignInIntent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intent, REQ_ONE_TAP);
     }
 
@@ -163,7 +163,7 @@ public class LoginFragment extends Fragment {
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (Exception e) {
                 hideLoadingBar();
-                AndroidUtil.setToast(requireActivity(),"Something went wrong");
+                AndroidUtil.setToast(requireActivity(), "Something went wrong");
             }
         }
     }
@@ -177,13 +177,15 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            AndroidUtil.setToast(requireActivity(),"Login successfully");
-                            startActivity(new Intent(requireActivity(),MainActivity.class));
+                            AndroidUtil.setToast(requireActivity(), "Login successfully");
+                            Intent i = new Intent(requireActivity(), MainActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(i);
                             requireActivity().finish();
                         } else {
                             hideLoadingBar();
                             // If sign in fails, display a message to the user.
-                            AndroidUtil.setToast(requireActivity(),"Login failed");
+                            AndroidUtil.setToast(requireActivity(), "Login failed");
                         }
                     }
                 });
@@ -199,12 +201,12 @@ public class LoginFragment extends Fragment {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private void showLoadingBar(){
+    private void showLoadingBar() {
         binding.loginLoadingBar.setVisibility(View.VISIBLE);
         binding.loginLoadingBar.playAnimation();
     }
 
-    private void hideLoadingBar(){
+    private void hideLoadingBar() {
         binding.loginLoadingBar.setVisibility(View.GONE);
         binding.loginLoadingBar.setImageDrawable(null);
     }

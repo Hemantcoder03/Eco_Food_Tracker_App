@@ -16,7 +16,7 @@
             android:layout_width="@dimen/_210sdp"
             android:layout_height="@dimen/_160sdp"
             android:layout_marginTop="@dimen/_75sdp"
-            android:src="@drawable/burgar_image"
+            android:src="@drawable/burger_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

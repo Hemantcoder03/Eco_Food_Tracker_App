@@ -6,9 +6,11 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
-import com.hemant.ecofoodtrackerapp.ConnectionReceiver;
+import com.google.android.material.snackbar.Snackbar;
+import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 
 public class AndroidUtil implements ConnectionReceiver.ReceiverListener{
@@ -19,6 +21,24 @@ public class AndroidUtil implements ConnectionReceiver.ReceiverListener{
 
     public static void setLog(String key,String msg){
         Log.d(key,msg);
+    }
+
+    public static void setSuccessSnackBar(View view, String message){
+        Snackbar snackbar = Snackbar.make(view,message,Snackbar.LENGTH_LONG);
+        snackbar.setAction("Done",v -> {
+           snackbar.dismiss();
+        });
+        snackbar.setBackgroundTint(view.getResources().getColor(R.color.green));
+        snackbar.show();
+    }
+
+    public static void setFailedSnackBar(View view, String message){
+        Snackbar snackbar = Snackbar.make(view,message,Snackbar.LENGTH_LONG);
+        snackbar.setAction("Dismiss",v -> {
+            snackbar.dismiss();
+        });
+        snackbar.setBackgroundTint(view.getResources().getColor(R.color.red));
+        snackbar.show();
     }
 
     public static void setIntentForUserDataModel(Intent intent, UserDataModel model){
@@ -58,7 +78,6 @@ public class AndroidUtil implements ConnectionReceiver.ReceiverListener{
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
         // get connection status
-
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 

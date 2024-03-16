@@ -7,4 +7,9 @@
     <color name="gray">#8C8C8C</color>
     <color name="textColor">#159E77</color>
     <color name="item_selected">#61B2DF</color>
+    <color name="startColor">#1FC57A</color>
+    <color name="endColor">#53E88B</color>
+    <color name="donorColor">#1F1FFF</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#28D30B</color>
 </resources>

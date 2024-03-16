@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ChatroomModel {
 
-    String classroomId;
+    String chatroomId;
     List<String> userIds;
     Timestamp lastMessageTimestamp;
     String lastMessageSenderId;
@@ -14,19 +14,19 @@ public class ChatroomModel {
     public ChatroomModel() {
     }
 
-    public ChatroomModel(String classroomId, List<String> userIds, Timestamp lastMessageTimestamp, String lastMessageSenderId) {
-        this.classroomId = classroomId;
+    public ChatroomModel(String chatroomId, List<String> userIds, Timestamp lastMessageTimestamp, String lastMessageSenderId) {
+        this.chatroomId = chatroomId;
         this.userIds = userIds;
         this.lastMessageTimestamp = lastMessageTimestamp;
         this.lastMessageSenderId = lastMessageSenderId;
     }
 
-    public String getClassroomId() {
-        return classroomId;
+    public String getChatroomId() {
+        return chatroomId;
     }
 
-    public void setClassroomId(String classroomId) {
-        this.classroomId = classroomId;
+    public void setChatroomId(String chatroomId) {
+        this.chatroomId = chatroomId;
     }
 
     public List<String> getUserIds() {

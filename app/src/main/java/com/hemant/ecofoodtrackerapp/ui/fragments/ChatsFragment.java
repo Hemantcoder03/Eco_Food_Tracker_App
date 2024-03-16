@@ -6,23 +6,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.hemant.ecofoodtrackerapp.adapters.ChatListAdapter;
 import com.hemant.ecofoodtrackerapp.databinding.FragmentChatsBinding;
-import com.hemant.ecofoodtrackerapp.models.ChatsDonor;
-import com.hemant.ecofoodtrackerapp.models.UserDataModel;
+import com.hemant.ecofoodtrackerapp.models.ChatroomModel;
+import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ChatsFragment extends Fragment {
 
     private FragmentChatsBinding binding;
-    private ArrayList<ChatsDonor> chatsDonors;
     ChatListAdapter chatListAdapter;
     View view;
     FirebaseFirestore db;
@@ -41,80 +44,43 @@ public class ChatsFragment extends Fragment {
         binding.chatsListProgressBar.setVisibility(View.VISIBLE);
 
         db = FirebaseFirestore.getInstance();
-        chatsDonors = new ArrayList<>();
 
-        Query query = FirebaseFirestore.getInstance().collection("Receivers");
-        FirestoreRecyclerOptions<UserDataModel> options = new FirestoreRecyclerOptions.Builder<UserDataModel>()
-                .setQuery(query, UserDataModel.class)
+        Query query = FirebaseFirestore.getInstance().collection("ChatRooms");
+        FirestoreRecyclerOptions<ChatroomModel> options = new FirestoreRecyclerOptions.Builder<ChatroomModel>()
+                .setQuery(query, ChatroomModel.class)
                 .build();
 
+        //check whether any chat is present if not then show the no chat found text
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(value.isEmpty()){
+                    binding.chatNoChatFound.setVisibility(View.VISIBLE);
+                }
+                else {
+                    query.get().addOnSuccessListener(v -> {
+                        List<ChatroomModel> model = v.toObjects(ChatroomModel.class);
+                        for (ChatroomModel chatroomModel : model) {
+                            if (!chatroomModel.getUserIds().get(0).equals(FirebaseUtil.getCurrentUserId())) {
+                                binding.chatNoChatFound.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
         chatListAdapter = new ChatListAdapter(options, requireActivity());
-        binding.donorChatRV.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        binding.donorChatRV.setAdapter(chatListAdapter);
+        binding.chatRV.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        binding.chatRV.setAdapter(chatListAdapter);
         binding.chatsListProgressBar.setVisibility(View.GONE);
-
-//        db.collection("Receivers").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                        binding.chatsListProgressBar.setVisibility(View.GONE);
-////                        if(!queryDocumentSnapshots.isEmpty()){
-////                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-////                            for(DocumentSnapshot d : list){
-////                                ChatsDonor data = d.toObject(ChatsDonor.class);
-////                                chatsDonors.add(data);
-////                            }
-//
-//                        ArrayList<UserDataModel> donorChats = new ArrayList<>();
-//
-//                        if(!queryDocumentSnapshots.isEmpty()){
-//                            List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
-//                            for(DocumentSnapshot d : list){
-//                                UserDataModel data = d.toObject(UserDataModel.class);
-//                                donorChats.add(data);
-//                            }
-//
-//                            chatListAdapter = new ChatListAdapter(requireActivity(), donorChats);
-//                            binding.donorChatRV.setLayoutManager(new LinearLayoutManager(requireActivity()));
-//                            binding.donorChatRV.setAdapter(chatListAdapter);
-//                        }else{
-//                            AndroidUtil.setToast(requireActivity(),"No data found");
-//                        }
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        binding.chatsListProgressBar.setVisibility(View.GONE);
-//                        AndroidUtil.setToast(requireActivity(),"Please check the internet connection");
-//                    }
-//                });
-
-
-//        CollectionReference ref = db.collection("Donors");
-//        CollectionReference ref2 = db.collection("Receivers");
-//        ref.add(donor).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentReference> task) {
-//
-//                if(task.isSuccessful()){
-//                    Toast.makeText(requireActivity(), "Successful", Toast.LENGTH_SHORT).show();
-//                }
-//                else{
-//                    Toast.makeText(requireActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
-//                }
-//            }`
-//        });
-
-//        chatListAdapter = new ChatListAdapter(requireActivity(), chatsDonors);
-//        binding.donorChatRV.setLayoutManager(new LinearLayoutManager(requireActivity()));
-//        binding.donorChatRV.setAdapter(chatListAdapter);
 
         return view;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         binding = null;
     }
 

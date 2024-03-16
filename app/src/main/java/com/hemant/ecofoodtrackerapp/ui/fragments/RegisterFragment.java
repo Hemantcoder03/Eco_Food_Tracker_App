@@ -29,6 +29,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.databinding.FragmentRegisterBinding;
+import com.hemant.ecofoodtrackerapp.models.LocationModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 import com.hemant.ecofoodtrackerapp.ui.activities.MainActivity;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
@@ -45,13 +46,13 @@ public class RegisterFragment extends Fragment {
     String userEmail,userPassword, userConfirmPassword;
     FirebaseFirestore db;
     SharedPreferences sharedPref;
+    FragmentRegisterBinding binding;
+    View view;
+
 
     public RegisterFragment() {
         // Required empty public constructor
     }
-
-    FragmentRegisterBinding binding;
-    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -129,22 +130,16 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        binding.registerGoogleBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.registerGoogleBtn.setOnClickListener(v-> {
                 binding.registerLoadingBar.setVisibility(View.VISIBLE);
                 signUp();
-            }
         });
 
-        binding.alreadyAccountBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.alreadyAccountBtn.setOnClickListener(v-> {
 
                 Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_loginFragment);
 //                startActivity(new Intent(requireActivity(), LoginActivity.class));
 //                requireActivity();
-            }
         });
 
         // Inflate the layout for requireActivity() fragment
@@ -154,6 +149,7 @@ public class RegisterFragment extends Fragment {
     public void signUp() {
         hideLoadingBar();
         Intent intent = googleClient.getSignInIntent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intent, REQ_ONE_TAP);
     }
 
@@ -165,7 +161,9 @@ public class RegisterFragment extends Fragment {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
 
-            startActivity(new Intent(requireActivity(), MainActivity.class));
+            Intent i = new Intent(requireActivity(), MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
             requireActivity().finish();
         }
     }
@@ -204,6 +202,7 @@ public class RegisterFragment extends Fragment {
                             hideLoadingBar();
                             Intent i = new Intent(requireActivity(), MainActivity.class);
                             AndroidUtil.setToast(requireActivity(),"Registration successfully");
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(i);
                             requireActivity().finish();
                         } else {
@@ -233,7 +232,7 @@ public class RegisterFragment extends Fragment {
         editor.putString("userName",name);
         editor.apply();
 
-        FirebaseUtil.setCurrentUserDetails(new UserDataModel(name,email, FirebaseUtil.getCurrentUserId(),"","", Timestamp.now()));
+        FirebaseUtil.setCurrentUserDetails(new UserDataModel(name,email, FirebaseUtil.getCurrentUserId(),"","","Receiver", Timestamp.now(),new LocationModel(),""));
     }
     
     private void hideLoadingBar(){

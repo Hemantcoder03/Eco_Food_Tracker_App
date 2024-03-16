@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/donor_nav"
+    app:startDestination="@id/donorLoginFragment">
+
+    <fragment
+        android:id="@+id/donorRegisterFragment"
+        android:name="com.hemant.ecofoodtrackerapp.donor.ui.fragments.DonorRegisterFragment"
+        android:label="fragment_donor_register"
+        tools:layout="@layout/fragment_donor_register" >
+        <action
+            android:id="@+id/action_donorRegisterFragment_to_donorLoginFragment"
+            app:destination="@id/donorLoginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/donorLoginFragment"
+        android:name="com.hemant.ecofoodtrackerapp.donor.ui.fragments.DonorLoginFragment"
+        android:label="fragment_donor_login"
+        tools:layout="@layout/fragment_donor_login" >
+        <action
+            android:id="@+id/action_donorLoginFragment_to_donorRegisterFragment"
+            app:destination="@id/donorRegisterFragment" />
+        <action
+            android:id="@+id/action_donorLoginFragment_to_donorForgotPasswordFragment"
+            app:destination="@id/donorForgotPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/donorForgotPasswordFragment"
+        android:name="com.hemant.ecofoodtrackerapp.donor.ui.fragments.DonorForgotPasswordFragment"
+        android:label="fragment_donor_forgot_password"
+        tools:layout="@layout/fragment_donor_forgot_password" />
+</navigation>

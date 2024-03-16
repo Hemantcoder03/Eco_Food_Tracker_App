@@ -15,8 +15,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hemant.ecofoodtrackerapp.R;
+import com.hemant.ecofoodtrackerapp.databinding.FragmentMapBinding;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
+
+    FragmentMapBinding binding;
+    View view;
 
     public MapFragment() {
         // Required empty public constructor
@@ -25,7 +29,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        binding = FragmentMapBinding.inflate(inflater,container,false);
+        view = binding.getRoot();
         // Initialize map fragment
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
 
@@ -82,5 +87,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 googleMap.addMarker(markerOptions);
             }
         });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

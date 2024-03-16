@@ -97,17 +97,30 @@
             app:layout_constraintTop_toBottomOf="@+id/loginEmail" />
 
         <TextView
+            android:id="@+id/loginForgetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/forget_password"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
+
+        <TextView
             android:id="@+id/textView12"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_18sdp"
-            android:layout_marginTop="@dimen/_13sdp"
             android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
             android:text="@string/or"
             android:textSize="@dimen/_13sdp"
-            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/register" />
 
         <TextView
             android:id="@+id/textView8"
@@ -120,21 +133,6 @@
             app:layout_constraintEnd_toEndOf="@+id/textView12"
             app:layout_constraintStart_toStartOf="@+id/textView12"
             app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-<!--        <androidx.appcompat.widget.AppCompatButton-->
-<!--            android:id="@+id/button3"-->
-<!--            android:layout_width="152dp"-->
-<!--            android:layout_height="@dimen/_42sdp"-->
-<!--            android:layout_marginTop="@dimen/_13sdp"-->
-<!--            android:layout_marginEnd="30dp"-->
-<!--            android:background="@drawable/white_background"-->
-<!--            android:drawableStart="@drawable/facebook_icon"-->
-<!--            android:elevation="@dimen/_8sdp"-->
-<!--            android:paddingStart="@dimen/_10sdp"-->
-<!--            android:text="@string/facebook"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/textView8"-->
-<!--           />-->
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/loginBtn"
@@ -149,7 +147,7 @@
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8" />
+            app:layout_constraintTop_toBottomOf="@+id/loginForgetPassword" />
 
         <TextView
             android:id="@+id/register"
@@ -176,7 +174,7 @@
             android:text="@string/google"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView8"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

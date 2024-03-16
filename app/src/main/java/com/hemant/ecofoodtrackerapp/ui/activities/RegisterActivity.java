@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hemant.ecofoodtrackerapp.R;
+import com.hemant.ecofoodtrackerapp.models.LocationModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 
@@ -218,7 +219,7 @@ public class RegisterActivity extends AppCompatActivity {
         editor.putString("userName",name);
         editor.apply();
 
-        FirebaseUtil.setCurrentUserDetails(new UserDataModel(name,email,FirebaseUtil.getCurrentUserId(),"","",Timestamp.now()));
+        FirebaseUtil.setCurrentUserDetails(new UserDataModel(name,email,"Receiver",FirebaseUtil.getCurrentUserId(),"","",Timestamp.now(),new LocationModel(),""));
 
 //        CollectionReference ref = db.collection("Receivers");
 //        ref.add(new ReceiverData(name,email,password)).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {

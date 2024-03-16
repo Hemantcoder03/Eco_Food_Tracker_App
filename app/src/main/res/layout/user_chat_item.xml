@@ -1,42 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/userChatItem"
-    android:layout_margin="@dimen/_5sdp"
-    android:padding="@dimen/_5sdp"
-    android:background="@drawable/search_border"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/userChatItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="@dimen/_8sdp"
+        app:cardCornerRadius="@dimen/_12sdp"
+        app:cardElevation="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:id="@+id/chatDonorImage"
-            android:padding="@dimen/_5sdp"
-            android:background="@drawable/item_stroke"
-            android:src="@drawable/user_icon"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/chatDonorName"
-            android:layout_weight="1"
-            android:text="@string/donor_name"
-            android:textAppearance="@style/FoodItemTextStyle"
-            android:padding="@dimen/_5sdp"/>
-    </LinearLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/userChatItemImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                app:cardCornerRadius="@dimen/_30sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_30sdp"
-        android:id="@+id/chatDonorLastMessage"
-        android:text="@string/last_message"
-        android:textAppearance="@style/FoodItemTextStyle"
-        android:padding="@dimen/_1sdp"/>
-</LinearLayout>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/chatSenderImage"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/user" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/chatSenderName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:padding="@dimen/_5sdp"
+                android:text="@string/donor_name"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/_17sdp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/chatLastMessage"
+                app:layout_constraintStart_toEndOf="@id/userChatItemImg"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/chatLastMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:paddingStart="@dimen/_5sdp"
+                android:text="@string/last_message"
+                android:textSize="@dimen/_13sdp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/chatSenderName"
+                app:layout_constraintTop_toBottomOf="@id/chatSenderName" />
+
+            <TextView
+                android:id="@+id/chatMessageTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_17sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:paddingStart="@dimen/_5sdp"
+                android:text="@string/time"
+                android:textSize="@dimen/_11sdp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--            message received notification-->
+            <!--            <androidx.cardview.widget.CardView-->
+            <!--                android:id="@+id/msgCard"-->
+            <!--                android:layout_width="@dimen/_22sdp"-->
+            <!--                android:layout_height="@dimen/_22sdp"-->
+            <!--                android:layout_marginTop="@dimen/_5sdp"-->
+            <!--                android:layout_marginBottom="@dimen/_8sdp"-->
+            <!--                app:cardBackgroundColor="#2196F3"-->
+            <!--                app:cardCornerRadius="100dp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="@id/chatMessageTime"-->
+            <!--                app:layout_constraintStart_toStartOf="@id/chatMessageTime"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/chatMessageTime">-->
+
+            <!--                <TextView-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_gravity="center"-->
+            <!--                    android:fontFamily="sans-serif-medium"-->
+            <!--                    android:text="1"-->
+            <!--                    android:textSize="@dimen/_13sdp"-->
+            <!--                    android:textStyle="bold" />-->
+            <!--            </androidx.cardview.widget.CardView>-->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

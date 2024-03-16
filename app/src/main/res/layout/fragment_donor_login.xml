@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".donor.ui.fragments.DonorLoginFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/donorLoginImage"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_95sdp"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:src="@drawable/burger_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/donorLoginAppName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/app_name"
+            android:textSize="@dimen/_23sdp"
+            app:layout_constraintEnd_toEndOf="@+id/donorLoginImage"
+            app:layout_constraintStart_toStartOf="@+id/donorLoginImage"
+            app:layout_constraintTop_toBottomOf="@+id/donorLoginImage" />
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/deliver_happiness_along_with_food"
+            android:textColor="@color/donorColor"
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintEnd_toEndOf="@+id/donorLoginAppName"
+            app:layout_constraintStart_toStartOf="@+id/donorLoginAppName"
+            app:layout_constraintTop_toBottomOf="@+id/donorLoginAppName" />
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/login_to_donor_account"
+            android:textAlignment="center"
+            android:textColor="@color/donorColor"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="@+id/text1"
+            app:layout_constraintStart_toStartOf="@+id/text1"
+            app:layout_constraintTop_toBottomOf="@+id/text1" />
+
+        <EditText
+            android:id="@+id/donorLoginEmail"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="@dimen/_41sdp"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:background="@drawable/edittext_background"
+            android:drawableStart="@drawable/email"
+            android:drawablePadding="@dimen/_13sdp"
+            android:elevation="@dimen/_8sdp"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:paddingStart="@dimen/_13sdp"
+            app:layout_constraintEnd_toEndOf="@+id/text2"
+            app:layout_constraintStart_toStartOf="@+id/text2"
+            app:layout_constraintTop_toBottomOf="@+id/text2" />
+
+        <EditText
+            android:id="@+id/donorLoginPassword"
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="@dimen/_41sdp"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:background="@drawable/edittext_background"
+            android:drawableStart="@drawable/lock_icon"
+            android:drawablePadding="@dimen/_13sdp"
+            android:elevation="@dimen/_8sdp"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:paddingStart="@dimen/_13sdp"
+            app:layout_constraintEnd_toEndOf="@+id/donorLoginEmail"
+            app:layout_constraintStart_toStartOf="@+id/donorLoginEmail"
+            app:layout_constraintTop_toBottomOf="@+id/donorLoginEmail"
+            tools:ignore="RtlSymmetry" />
+
+
+        <TextView
+            android:id="@+id/loginForgetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/forget_password"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/donorLoginPassword" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/donorLoginBtn"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:background="@drawable/donor_button"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/login_as_donor"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/loginForgetPassword" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
+            android:text="@string/or"
+            android:textSize="@dimen/_13sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/donorLoginDoNotAccText" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/continue_with"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintEnd_toEndOf="@+id/textView12"
+            app:layout_constraintStart_toStartOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+        <TextView
+            android:id="@+id/donorLoginDoNotAccText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/don_t_have_an_account"
+            android:textColor="@color/textColor"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintStart_toStartOf="@id/donorLoginBtn"
+            app:layout_constraintEnd_toEndOf="@id/donorLoginBtn"
+            app:layout_constraintTop_toBottomOf="@id/donorLoginBtn"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/loginGoogleBtn"
+            android:layout_width="@dimen/_125sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_marginTop="@dimen/_13sdp"
+            android:background="@drawable/white_background"
+            android:drawableStart="@drawable/google_icon"
+            android:elevation="@dimen/_8sdp"
+            android:paddingStart="@dimen/_10sdp"
+            android:text="@string/google"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView8"/>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:id="@+id/donorLoginLoadingBar"
+                android:visibility="gone"
+                app:lottie_rawRes="@raw/loading_bar"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</FrameLayout>

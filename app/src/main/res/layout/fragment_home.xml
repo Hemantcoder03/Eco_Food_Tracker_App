@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/_5sdp"
     tools:context=".ui.fragments.HomeFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -56,11 +56,11 @@
                 android:id="@+id/loadingAnimation"
                 app:lottie_autoPlay="false"
                 app:lottie_loop="true"
-                android:visibility="gone"
-                app:lottie_rawRes="@raw/loading_spoon"/>
+                app:lottie_rawRes="@raw/loading_spoon"
+                android:visibility="gone"/>
 
 <!--            <ProgressBar-->
-<!--                android:id="@+id/progressBar"-->
+<!--                android:id="@+id/loadingAnimation"-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->
 <!--                android:visibility="gone"-->

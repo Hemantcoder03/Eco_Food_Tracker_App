@@ -1,103 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="@dimen/_5sdp"
-    app:cardCornerRadius="@dimen/_5sdp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/foodItemLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:layout_width="@dimen/_65sdp"
-            android:layout_height="@dimen/_65sdp"
-            android:layout_margin="@dimen/_5sdp"
-            android:id="@+id/itemFoodImg"
-            android:contentDescription="@string/food_image"
-            android:src="@drawable/donation"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardElevation="@dimen/_13sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/_5sdp">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/itemFoodName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/food_name"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_13sdp"
-                android:textStyle="bold" />
+            <ImageButton
+                android:id="@+id/itemFoodImg"
+                android:layout_width="@dimen/_65sdp"
+                android:layout_height="@dimen/_65sdp"
+                android:layout_margin="@dimen/_5sdp"
+                android:contentDescription="@string/food_image"
+                android:scaleType="center"
+                android:src="@drawable/donation" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:id="@+id/itemDonorProfileImg"
-                    android:src="@drawable/profile_btn"
-                    android:background="@color/transparent" />
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/_5sdp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/itemDonorProfileName"
-                    android:singleLine="true"
-                    android:layout_weight="1"
-                    android:text="@string/name"
-                    android:textAppearance="@style/FoodItemTextStyle"/>
-
-                <TextView
+                    android:id="@+id/itemFoodName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/itemRateCount"
-                    android:textAppearance="@style/FoodItemTextStyle"
-                    android:text="@string/rate"
-                    app:drawableRightCompat="@drawable/star_icon" />
+                    android:text="@string/food_name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_13sdp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/itemDonorProfileImg"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:background="@color/transparent"
+                        android:src="@drawable/profile_btn" />
+
+                    <TextView
+                        android:id="@+id/itemDonorProfileName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="@string/name"
+                        android:textAppearance="@style/FoodItemTextStyle" />
+
+                    <TextView
+                        android:id="@+id/itemRateCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rate"
+                        android:textAppearance="@style/FoodItemTextStyle"
+                        app:drawableRightCompat="@drawable/star_icon" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
+                        android:background="@color/transparent"
+                        android:src="@drawable/location_btn" />
+
+                    <TextView
+                        android:id="@+id/itemDonorNearbyLoc"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/_0_0_m"
+                        android:textAppearance="@style/FoodItemTextStyle" />
+
+                    <TextView
+                        android:id="@+id/itemDonateDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_14sdp"
+                        android:text="@string/date"
+                        android:textAppearance="@style/FoodItemTextStyle" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="@dimen/_17sdp"
-                    android:layout_height="@dimen/_17sdp"
-                    android:src="@drawable/location_btn"
-                    android:background="@color/transparent" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/itemDonorNearbyLoc"
-                    android:singleLine="true"
-                    android:text="@string/map"
-                    android:textAppearance="@style/FoodItemTextStyle"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/itemDonateDate"
-                    android:layout_marginStart="@dimen/_14sdp"
-                    android:textAppearance="@style/FoodItemTextStyle"
-                    android:text="@string/date"/>
-            </LinearLayout>
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-
-
-</com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

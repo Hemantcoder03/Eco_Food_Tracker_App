@@ -1,5 +1,6 @@
 package com.hemant.ecofoodtrackerapp.ui.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,17 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.databinding.FragmentProfileBinding;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
+import com.hemant.ecofoodtrackerapp.ui.activities.HistoryActivity;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 
@@ -38,19 +34,7 @@ public class ProfileFragment extends Fragment {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         view = binding.getRoot();
-
-//        logoutBtn = view.findViewById(R.id.logoutBtn);
-//
-//        mAuth = FirebaseAuth.getInstance();
-//        logoutBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAuth.signOut();
-//                Intent i = new Intent(getActivity(), RegisterActivity.class);
-//                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(i);
-//            }
-//        });
+        mAuth = FirebaseAuth.getInstance();
 
         setUpdatedUserInformation();
 
@@ -87,10 +71,16 @@ public class ProfileFragment extends Fragment {
         });
 
         binding.profileChatBtn.setOnClickListener(v ->{
-            Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_chatsFragment);
+//            NavController navController = Navigation.findNavController(requireView());
+//            navController.navigate(R.id.action_profileFragment_to_chatsFragment);
+
+//            Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_chatsFragment);
             requireActivity().finish();
         });
 
+        binding.profileHistoryLayout.setOnClickListener(v ->{
+            startActivity(new Intent(requireActivity(), HistoryActivity.class));
+        });
 
 
         // Inflate the layout for this fragment
@@ -99,11 +89,9 @@ public class ProfileFragment extends Fragment {
 
     public void setUpdatedUserInformation(){
         //set the updated data
-        FirebaseUtil.getCurrentUserDetails().get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    UserDataModel userDataModel = task.getResult().toObject(UserDataModel.class);
+        FirebaseUtil.getCurrentUserDetails().get().addOnCompleteListener(v ->{
+                if (v.isSuccessful()) {
+                    UserDataModel userDataModel = v.getResult().toObject(UserDataModel.class);
                     if (userDataModel != null) {
                         binding.profileNameInput.setText(userDataModel.getUserName());
                         binding.profileName.setText(userDataModel.getUserName());
@@ -115,7 +103,6 @@ public class ProfileFragment extends Fragment {
                 } else {
                     AndroidUtil.setToast(requireActivity(), "Please check your internet connection");
                 }
-            }
         });
     }
 }

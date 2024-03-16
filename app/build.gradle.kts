@@ -1,4 +1,3 @@
-import org.gradle.internal.impldep.com.fasterxml.jackson.core.JsonPointer.compile
 
 plugins {
     id("com.android.application")
@@ -74,7 +73,7 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     //lottie files
-    implementation("com.airbnb.android:lottie:3.4.0")
+    implementation("com.airbnb.android:lottie:6.3.0")
 
     // Import the BoM for the Firebase platform
     implementation("com.google.firebase:firebase-bom:32.0.0")
@@ -87,4 +86,7 @@ dependencies {
 
     //picasso library for set image to ImageView
     implementation("com.squareup.picasso:picasso:2.8")
+
+    //get the current location
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 }

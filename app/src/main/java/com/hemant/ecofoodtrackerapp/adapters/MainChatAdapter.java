@@ -27,7 +27,7 @@ public class MainChatAdapter extends FirestoreRecyclerAdapter<ChatMessageModel, 
     @NonNull
     @Override
     public MainChatAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chats_recycelerview_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chats_recyclerview_layout, parent, false);
         return new MainChatAdapter.MyViewHolder(view);
     }
 

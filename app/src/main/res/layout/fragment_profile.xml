@@ -6,56 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.ProfileFragment">
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:gravity="center_horizontal"-->
-<!--        android:orientation="vertical">-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="@dimen/_25sdp"-->
-<!--            android:layout_marginBottom="@dimen/_5sdp"-->
-<!--            android:gravity="center_horizontal"-->
-<!--            android:orientation="vertical">-->
-
-<!--            <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                android:id="@+id/profileImage"-->
-<!--                android:layout_width="@dimen/_70sdp"-->
-<!--                android:layout_height="@dimen/_70sdp"-->
-<!--                android:src="@drawable/donation"-->
-<!--                app:civ_border_color="@color/black"-->
-<!--                app:civ_border_width="@dimen/_1sdp" />-->
-
-<!--            <com.google.android.material.textview.MaterialTextView-->
-<!--                android:id="@+id/profileName"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="@string/name"-->
-<!--                android:textAppearance="@style/FoodItemTextStyle"-->
-<!--                android:textSize="@dimen/_20sdp" />-->
-<!--        </LinearLayout>-->
-
-<!--        <View-->
-<!--            android:id="@+id/view"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="@dimen/_1sdp"-->
-<!--            android:background="@drawable/shadow" />-->
-
-
-<!--        <com.google.android.material.button.MaterialButton-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:id="@+id/logoutBtn"-->
-<!--            android:layout_marginTop="@dimen/_30sdp"-->
-<!--            android:background="@drawable/search_border"-->
-<!--            android:drawableLeft="@drawable/logout_icon"-->
-<!--            android:text="@string/logout"-->
-<!--            android:textAppearance="@style/FoodItemTextStyle"-->
-<!--            android:textColor="@color/black" />-->
-<!--    </LinearLayout>-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -88,6 +38,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constraintLayout2"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_250sdp"
                             android:background="@drawable/profile_background"
@@ -103,19 +54,19 @@
                             android:layout_width="@dimen/_70sdp"
                             android:layout_height="@dimen/_70sdp"
                             android:layout_marginTop="@dimen/_27sdp"
-                            android:src="@drawable/profile_btn"
                             android:background="@drawable/item_stroke"
+                            android:src="@drawable/profile_btn"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
                             android:id="@+id/profileName"
+                            style="@style/FoodItemTextStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_10sdp"
                             android:text="@string/name"
-                            style="@style/FoodItemTextStyle"
                             android:textSize="@dimen/_20sdp"
                             android:textStyle="bold|normal"
                             app:layout_constraintEnd_toEndOf="@+id/profileImage"
@@ -158,9 +109,9 @@
                                 android:orientation="horizontal">
 
                                 <LinearLayout
+                                    android:id="@+id/profileHistoryLayout"
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:id="@+id/profileBeDonorLayout"
                                     android:layout_margin="@dimen/_7sdp"
                                     android:layout_weight="0.333"
                                     android:background="@drawable/profile_white_background"
@@ -175,7 +126,7 @@
                                         android:background="@drawable/profile_settings_background">
 
                                         <ImageView
-                                            android:id="@+id/profileBeDonorBtn"
+                                            android:id="@+id/profileHistoryBtn"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:padding="@dimen/_7sdp"
@@ -187,7 +138,7 @@
                                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                                     <TextView
-                                        android:id="@+id/profileBeDonorText"
+                                        android:id="@+id/profileHistoryText"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_margin="@dimen/_5sdp"
@@ -228,7 +179,7 @@
                                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                                     <TextView
-                                        android:id="@+id/textView42"
+                                        android:id="@+id/profileChatText"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_margin="@dimen/_5sdp"
@@ -258,7 +209,7 @@
 
                                         <ImageView
                                             android:id="@+id/profileSettingsBtn"
-                                               android:layout_width="@dimen/_60sdp"
+                                            android:layout_width="@dimen/_60sdp"
                                             android:layout_height="@dimen/_60sdp"
                                             android:padding="@dimen/_8sdp"
                                             android:src="@drawable/profile_settings_icon"
@@ -287,13 +238,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_8sdp"
-                                android:layout_marginEnd="@dimen/_8sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
-                                android:padding="@dimen/_5sdp"
+                                android:layout_marginEnd="@dimen/_8sdp"
                                 android:background="@drawable/profile_et_background"
                                 android:elevation="@dimen/_7sdp"
                                 android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:padding="@dimen/_5sdp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -314,58 +265,13 @@
                                     android:layout_weight="1"
                                     android:background="@color/transparent"
                                     android:clickable="false"
-                                    android:focusable="false"
                                     android:ems="10"
+                                    android:focusable="false"
                                     android:fontFamily="sans-serif"
                                     android:hint="@string/name"
                                     android:inputType="text"
                                     android:text="@string/name" />
                             </LinearLayout>
-
-<!--                            <View-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="match_parent"-->
-<!--                                android:layout_marginStart="@dimen/_12sdp"-->
-<!--                                android:layout_marginEnd="@dimen/_12sdp"-->
-<!--                                android:layout_marginBottom="@dimen/_12sdp" />-->
-
-<!--                            <LinearLayout-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_marginStart="@dimen/_8sdp"-->
-<!--                                android:layout_marginEnd="@dimen/_8sdp"-->
-<!--                                android:layout_marginTop="@dimen/_10sdp"-->
-<!--                                android:padding="@dimen/_5sdp"-->
-<!--                                android:background="@drawable/profile_et_background"-->
-<!--                                android:elevation="@dimen/_8sdp"-->
-<!--                                android:gravity="center_vertical"-->
-<!--                                android:orientation="horizontal">-->
-
-<!--                                <TextView-->
-<!--                                    android:layout_width="wrap_content"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:layout_marginStart="@dimen/_5sdp"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    android:fontFamily="sans-serif-medium"-->
-<!--                                    android:text="@string/email"-->
-<!--                                    android:textColor="@color/black"-->
-<!--                                    android:textSize="@dimen/_13sdp"-->
-<!--                                    android:textStyle="bold" />-->
-
-<!--                                <EditText-->
-<!--                                    android:layout_width="wrap_content"-->
-<!--                                    android:layout_height="wrap_content"-->
-<!--                                    android:id="@+id/profileEmailInput"-->
-<!--                                    android:hint="@string/email"-->
-<!--                                    android:layout_weight="1"-->
-<!--                                    android:background="@color/transparent"-->
-<!--                                    android:ems="10"-->
-<!--                                    android:clickable="false"-->
-<!--                                    android:focusable="false"-->
-<!--                                    android:fontFamily="sans-serif"-->
-<!--                                    android:inputType="textEmailAddress"-->
-<!--                                    android:text="@string/email" />-->
-<!--                            </LinearLayout>-->
 
                             <View
                                 android:layout_width="match_parent"
@@ -378,13 +284,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_8sdp"
-                                android:layout_marginEnd="@dimen/_8sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
-                                android:padding="@dimen/_5sdp"
+                                android:layout_marginEnd="@dimen/_8sdp"
                                 android:background="@drawable/profile_et_background"
                                 android:elevation="@dimen/_8sdp"
                                 android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:padding="@dimen/_5sdp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -398,15 +304,15 @@
                                     android:textStyle="bold" />
 
                                 <EditText
+                                    android:id="@+id/profilePhoneInput"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/profilePhoneInput"
-                                    android:hint="@string/phone"
                                     android:layout_weight="1"
                                     android:background="@color/transparent"
                                     android:ems="10"
                                     android:focusableInTouchMode="false"
                                     android:fontFamily="sans-serif"
+                                    android:hint="@string/phone"
                                     android:inputType="phone" />
                             </LinearLayout>
 
@@ -421,14 +327,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="@dimen/_8sdp"
-                                android:layout_marginEnd="@dimen/_8sdp"
                                 android:layout_marginTop="@dimen/_10sdp"
+                                android:layout_marginEnd="@dimen/_8sdp"
                                 android:layout_marginBottom="@dimen/_8sdp"
-                                android:padding="@dimen/_5sdp"
                                 android:background="@drawable/profile_et_background"
                                 android:elevation="@dimen/_8sdp"
                                 android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:orientation="horizontal"
+                                android:padding="@dimen/_5sdp">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -441,17 +347,17 @@
                                     android:textStyle="bold" />
 
                                 <EditText
+                                    android:id="@+id/profileAddressInput"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:id="@+id/profileAddressInput"
-                                    android:hint="@string/address"
                                     android:layout_gravity="center"
                                     android:layout_weight="1"
                                     android:background="@color/transparent"
-                                    android:ems="10"
                                     android:clickable="false"
+                                    android:ems="10"
                                     android:focusable="false"
                                     android:fontFamily="sans-serif"
+                                    android:hint="@string/address"
                                     android:inputType="textMultiLine" />
                             </LinearLayout>
 
@@ -465,9 +371,9 @@
         </ScrollView>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/profileEditBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/profileEditBtn"
             android:layout_margin="@dimen/_22sdp"
             android:background="@drawable/profile_btn_background"
             android:elevation="@dimen/_8sdp"
@@ -479,8 +385,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-        </androidx.appcompat.widget.AppCompatButton>
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

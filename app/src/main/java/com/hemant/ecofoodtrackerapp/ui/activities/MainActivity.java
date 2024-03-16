@@ -1,23 +1,39 @@
 package com.hemant.ecofoodtrackerapp.ui.activities;
 
+import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Looper;
+import android.provider.Settings;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.databinding.ActivityMainBinding;
+import com.hemant.ecofoodtrackerapp.models.LocationModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 import com.hemant.ecofoodtrackerapp.ui.fragments.CartFragment;
 import com.hemant.ecofoodtrackerapp.ui.fragments.ChatsFragment;
@@ -26,8 +42,6 @@ import com.hemant.ecofoodtrackerapp.ui.fragments.MapFragment;
 import com.hemant.ecofoodtrackerapp.ui.fragments.ProfileFragment;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
-
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     TextView toolbarTitle;
     FirebaseAuth mAuth;
     SharedPreferences sharedPref;
+    private static final int LOCATION_CODE = 101;
+
+    FusedLocationProviderClient fusedLocationClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
-        sharedPref = getSharedPreferences("My_Pref",0);
+        sharedPref = getSharedPreferences("My_Pref", 0);
 
         openCloseNavBtn = findViewById(R.id.openCloseNavBtn);
         bottomNav = findViewById(R.id.bottomNav);
@@ -74,36 +92,28 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        openCloseNavBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
-                    binding.drawerLayout.closeDrawer(GravityCompat.START);
-                }
-                else{
-                    binding.drawerLayout.openDrawer(GravityCompat.START);
-                }
+        openCloseNavBtn.setOnClickListener(v -> {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                binding.drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                binding.drawerLayout.openDrawer(GravityCompat.START);
             }
         });
 
         //set bottom navigation redirection
-        bottomNav.setOnNavigationItemSelectedListener(item ->{
+        bottomNav.setOnNavigationItemSelectedListener(item -> {
             //get the item id and according to that set the menu of bottom navigation bar
             int id = item.getItemId();
 
-            if(id == R.id.homeBottomBtn){
+            if (id == R.id.homeBottomBtn) {
                 loadFragment(new HomeFragment(), false);
-            }
-            else if(id == R.id.mapBottomBtn){
+            } else if (id == R.id.mapBottomBtn) {
                 loadFragment(new MapFragment(), false);
-            }
-            else if(id == R.id.chatBottomBtn){
+            } else if (id == R.id.chatBottomBtn) {
                 loadFragment(new ChatsFragment(), false);
-            }
-            else if(id == R.id.cartBottomBtn){
+            } else if (id == R.id.cartBottomBtn) {
                 loadFragment(new CartFragment(), false);
-            }
-            else if(id == R.id.profileBottomBtn){
+            } else if (id == R.id.profileBottomBtn) {
                 loadFragment(new ProfileFragment(), false);
             }
             return true;
@@ -123,39 +133,111 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void loadFragment(Fragment fragment, boolean flag){
+    public void loadFragment(Fragment fragment, boolean flag) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        if(flag) {
+        if (flag) {
             ft.add(R.id.frame, fragment);
-        }else {
-            ft.replace(R.id.frame,fragment);
+        } else {
+            ft.replace(R.id.frame, fragment);
         }
         ft.commit();
 
-        if(binding.drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
         }
     }
 
-    private void setUserName(){
-        FirebaseUtil.getCurrentUserDetails().get().addOnCompleteListener(v ->{
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getCurrentLocations();
+    }
 
-            if(v.isSuccessful()){
-                UserDataModel user = v.getResult().toObject(UserDataModel.class);
-                String userName = Objects.requireNonNull(user).getUserName();
-                if(userName.length() > 10){
-                    toolbarTitle.setText(getString(R.string.hello)+" "+userName.substring(0,10)+"...");
-                }
-                else {
-                    toolbarTitle.setText(getString(R.string.hello)+" "+userName);
+    private void getCurrentLocations() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_CODE);
+            getCurrentLocations();
+            return;
+        }
+
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        fusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                Location location = task.getResult();
+                if (location == null) {
+                    //if not found location
+                    requestNewLocationData();
+                } else {
+                    LocationModel currentLocation = new LocationModel(location.getLatitude(), location.getLongitude());
+                    FirebaseUtil.setUserCurrentLocation(MainActivity.this, currentLocation);
                 }
             }
-            else{
+        });
+    }
+
+
+    private void setUserName() {
+        FirebaseUtil.getCurrentUserDetails().get().addOnCompleteListener(v -> {
+
+            if (v.isSuccessful()) {
+                UserDataModel user = v.getResult().toObject(UserDataModel.class);
+                String userName;
+                if (user != null) {
+                    userName = user.getUserName();
+                    if (userName.length() > 10) {
+                        toolbarTitle.setText(getString(R.string.hello) + " " + userName.substring(0, 10) + "...");
+                    } else {
+                        toolbarTitle.setText(getString(R.string.hello) + " " + userName);
+                    }
+                } else {
+                    AndroidUtil.setToast(this, "Please check your internet connection");
+                }
+            } else {
                 AndroidUtil.setToast(this, "Please check your internet connection");
             }
         });
     }
+
+    private void requestNewLocationData() {
+
+        // Initializing LocationRequest
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(5);
+        mLocationRequest.setFastestInterval(0);
+        mLocationRequest.setNumUpdates(1);
+
+        // on FusedLocationClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        fusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+    }
+
+    private LocationCallback mLocationCallback = new LocationCallback() {
+
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            Location mLastLocation = locationResult.getLastLocation();
+            LocationModel currentLocation = null;
+            if (mLastLocation != null) {
+                currentLocation = new LocationModel(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                FirebaseUtil.setUserCurrentLocation(MainActivity.this, currentLocation);
+            }
+        }
+    };
 
     @Override
     protected void onDestroy() {
@@ -163,138 +245,3 @@ public class MainActivity extends AppCompatActivity {
         binding = null;
     }
 }
-
-
-
-/*
-
-package com.hemant.ecofoodtrackerapp.fragments;
-
-import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.hemant.ecofoodtrackerapp.R;;
-import com.hemant.ecofoodtrackerapp.adapters.FoodListAdapter;
-import com.hemant.ecofoodtrackerapp.models.FoodData;
-
-import java.util.ArrayList;
-
-public class HomeFragment extends Fragment{
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
-
-    FirebaseDatabase db;
-    DatabaseReference ref;
-    SearchView searchFood;
-    ImageButton searchFilterBtn;
-    RecyclerView foodListRV;
-    ArrayList<FoodData> foodDataList;
-    FoodListAdapter foodListAdapter;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        //get the database reference
-//        db = FirebaseDatabase.getInstance();
-//        ref = db.getReference();
-//
-//        searchFood = view.findViewById(R.id.searchFood);
-//        searchFilterBtn = view.findViewById(R.id.searchFilterBtn);
-//        foodListRV = view.findViewById(R.id.foodListRV);
-
-//        FirebaseRecyclerOptions<FoodData> options =
-//                new FirebaseRecyclerOptions.Builder<FoodData>()
-//                        .setQuery(ref.child("Food_list"), FoodData.class)
-//                        .build();
-
-        foodDataList.add(new FoodData("dljhfjk","gdhgjhfs","gdshgh","ghsgjgdhf","gdhgoishd","gshdhg"));
-        foodDataList.add(new FoodData("dljhfjk","gdhgjhfs","gdshgh","ghsgjgdhf","gdhgoishd","gshdhg"));
-        foodDataList.add(new FoodData("dljhfjk","gdhgjhfs","gdshgh","ghsgjgdhf","gdhgoishd","gshdhg"));
-        foodDataList.add(new FoodData("dljhfjk","gdhgjhfs","gdshgh","ghsgjgdhf","gdhgoishd","gshdhg"));
-        foodDataList.add(new FoodData("dljhfjk","gdhgjhfs","gdshgh","ghsgjgdhf","gdhgoishd","gshdhg"));
-        foodDataList.add(new FoodData("dljhfjk","gdhgjhfs","gdshgh","ghsgjgdhf","gdhgoishd","gshdhg"));
-        foodDataList.add(new FoodData("dljhfjk","gdhgjhfs","gdshgh","ghsgjgdhf","gdhgoishd","gshdhg"));
-
-//        foodListRV.setLayoutManager(new LinearLayoutManager(getActivity().getParent()));
-//        foodListAdapter = new FoodListAdapter(foodDataList,getActivity().getParent());
-//        foodListRV.setAdapter(foodListAdapter);
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
-    }
-}
- */
-
-
-
-/*
-
-
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/_5sdp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.HomeFragment">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <androidx.appcompat.widget.SearchView
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_30sdp"
-                android:id="@+id/searchFood"
-                android:layout_weight="1"
-                app:iconifiedByDefault="false"
-                app:queryHint="Search Here"
-                android:layout_margin="@dimen/_2sdp"
-                android:background="@drawable/search_border"/>
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_30sdp"
-                android:id="@+id/searchFilterBtn"
-                android:padding="@dimen/_5sdp"
-                android:background="@color/transparent"
-                android:src="@drawable/filter_icon"/>
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/foodListRV"
-            tools:listitem="@layout/food_item"
-            android:layout_margin="@dimen/_5sdp"/>
-    </LinearLayout>
-
-</FrameLayout>
- */

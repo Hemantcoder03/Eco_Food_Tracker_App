@@ -4,24 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-import com.hemant.ecofoodtrackerapp.ConnectionReceiver;
 import com.hemant.ecofoodtrackerapp.adapters.MainChatAdapter;
 import com.hemant.ecofoodtrackerapp.databinding.ActivityMainChatBinding;
 import com.hemant.ecofoodtrackerapp.models.ChatMessageModel;
 import com.hemant.ecofoodtrackerapp.models.ChatroomModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
+import com.hemant.ecofoodtrackerapp.util.ConnectionReceiver;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 
 import java.util.Arrays;
@@ -44,14 +39,19 @@ public class MainChatActivity extends AppCompatActivity implements ConnectionRec
         binding = ActivityMainChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        if (!checkInternetCon()) {
+            return;
+        }
+
+
         binding.donorChatName.setText(donor.getUserName());
 
-        binding.donorChatBackBtn.setOnClickListener(v -> {
+        binding.mainChatBackBtn.setOnClickListener(v -> {
             startActivity(new Intent(MainChatActivity.this, MainActivity.class));
         });
 
-        binding.donorChatSendBtn.setOnClickListener(v -> {
-            String msg = binding.donorChatTextInput.getText().toString().trim();
+        binding.mainChatSendBtn.setOnClickListener(v -> {
+            String msg = binding.mainChatTextInput.getText().toString().trim();
             if (msg.isEmpty())
                 return;
 
@@ -74,16 +74,12 @@ public class MainChatActivity extends AppCompatActivity implements ConnectionRec
         adapter = new MainChatAdapter(options, this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setReverseLayout(true);
-        binding.donorChatRV.setLayoutManager(manager);
-        binding.donorChatRV.setAdapter(adapter);
+        binding.mainChatRV.setLayoutManager(manager);
+        binding.mainChatRV.setAdapter(adapter);
     }
 
     private void sendMessageToDonor(String msg) {
-
-        //first check the network connection
-        if(!AndroidUtil.checkConnection(this)){
-            AndroidUtil.setToast(this,"Please check your internet connection");
-            binding.mainChatProgressBar.setVisibility(View.GONE);
+        if (!checkInternetCon()) {
             return;
         }
 
@@ -93,30 +89,41 @@ public class MainChatActivity extends AppCompatActivity implements ConnectionRec
 
         ChatMessageModel chatMessageModel = new ChatMessageModel(msg, FirebaseUtil.getCurrentUserId(), Timestamp.now());
         FirebaseUtil.getChatroomMessageReference(chatroomId).add(chatMessageModel)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if (task.isSuccessful()) {
-                            binding.mainChatProgressBar.setVisibility(View.GONE);
-                            binding.donorChatTextInput.setText("");
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        binding.mainChatProgressBar.setVisibility(View.GONE);
+                        binding.mainChatTextInput.setText("");
+                        //when create an chatroom add last message add message and also add other details
+//                        Map<String, Object> chatMap = new HashMap<>();
+//                        chatMap.put("chatDonorLastMessage",msg);
+//                        FirebaseUtil.getLastMsgReference(chatroomId).document("lastMsg").update(chatMap)
+//                                .addOnFailureListener(v3 -> {
+//                                    AndroidUtil.setToast(MainChatActivity.this, "Something went wrong");
+//                                });
                     }
                 });
     }
 
-
+    public Boolean checkInternetCon() {
+        //first check the network connection
+        if (!AndroidUtil.checkConnection(this)) {
+            AndroidUtil.setToast(this, "Please check your internet connection");
+            binding.mainChatProgressBar.setVisibility(View.GONE);
+            return false;
+        }
+        return true;
+    }
 
     private void getOrCreateChatroomId() {
-        FirebaseUtil.getChatroomReference(chatroomId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                chatroomModel = task.getResult().toObject(ChatroomModel.class);
-                if (chatroomModel == null) {
-                    //create a new chatroom
-                    chatroomModel = new ChatroomModel(chatroomId, Arrays.asList(FirebaseUtil.getCurrentUserId(), donor.getUserId()), Timestamp.now(), "");
-                    FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel);
-                }
-
+        FirebaseUtil.getChatroomReference(chatroomId).get().addOnCompleteListener(v -> {
+            chatroomModel = v.getResult().toObject(ChatroomModel.class);
+            if (chatroomModel == null) {
+                //create a new chatroom
+                chatroomModel = new ChatroomModel(chatroomId, Arrays.asList(FirebaseUtil.getCurrentUserId(), donor.getUserId()), Timestamp.now(), "");
+                FirebaseUtil.getChatroomReference(chatroomId).set(chatroomModel)
+                        .addOnFailureListener(v2 -> {
+                            AndroidUtil.setToast(MainChatActivity.this, "Something went wrong");
+                        });
             }
         });
     }
@@ -139,8 +146,21 @@ public class MainChatActivity extends AppCompatActivity implements ConnectionRec
         adapter.startListening();
     }
 
+    //is is used for check network connection but not used for now
     @Override
     public void onNetworkChange(boolean isConnected) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(MainChatActivity.this, MainActivity.class));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

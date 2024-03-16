@@ -25,7 +25,7 @@
             android:padding="@dimen/_5sdp">
 
             <ImageButton
-                android:id="@+id/donorChatBackBtn"
+                android:id="@+id/mainChatBackBtn"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="center"
@@ -34,7 +34,7 @@
                 android:src="@drawable/back_icon" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/donorChatImage"
+                android:id="@+id/mainChatImage"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="center"
@@ -53,7 +53,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/donorChatRV"
+            android:id="@+id/mainChatRV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
@@ -65,7 +65,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/donorChatTextInput"
+                android:id="@+id/mainChatTextInput"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -75,7 +75,7 @@
                 android:padding="@dimen/_5sdp" />
 
             <ImageButton
-                android:id="@+id/donorChatSendBtn"
+                android:id="@+id/mainChatSendBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
