@@ -43,7 +43,6 @@ public class MainChatActivity extends AppCompatActivity implements ConnectionRec
             return;
         }
 
-
         binding.donorChatName.setText(donor.getUserName());
 
         binding.mainChatBackBtn.setOnClickListener(v -> {
