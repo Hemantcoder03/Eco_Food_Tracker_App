@@ -51,6 +51,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.10.0")
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("com.firebaseui:firebase-ui-firestore:8.0.0")
+    implementation("com.android.volley:volley:1.2.1")
+    implementation("androidx.activity:activity:1.8.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -76,7 +78,7 @@ dependencies {
     implementation("com.airbnb.android:lottie:6.3.0")
 
     // Import the BoM for the Firebase platform
-    implementation("com.google.firebase:firebase-bom:32.0.0")
+    implementation("com.google.firebase:firebase-bom:32.7.4")
 
     // Add the dependency for the Firebase Authentication library
     implementation("com.google.firebase:firebase-auth")
@@ -89,4 +91,8 @@ dependencies {
 
     //get the current location
     implementation("com.google.android.gms:play-services-location:21.2.0")
+
+    //firebase messaging service
+    implementation("com.google.firebase:firebase-core:21.1.1")
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
 }

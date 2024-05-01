@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.donor.ui.activities.DonorMainChatActivity;
+import com.hemant.ecofoodtrackerapp.donor.ui.fragments.DonorChatsFragment;
 import com.hemant.ecofoodtrackerapp.models.ChatMessageModel;
 import com.hemant.ecofoodtrackerapp.models.ChatroomModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
@@ -32,10 +34,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DonorChatListAdapter extends FirestoreRecyclerAdapter<ChatroomModel, DonorChatListAdapter.MyViewHolder> {
 
     Context context;
+    DonorChatsFragment donorChatsFragment;
 
-    public DonorChatListAdapter(@NonNull FirestoreRecyclerOptions<ChatroomModel> options, Context context) {
+    public DonorChatListAdapter(@NonNull FirestoreRecyclerOptions<ChatroomModel> options, Context context, DonorChatsFragment donorChatsFragment) {
         super(options);
         this.context = context;
+        this.donorChatsFragment = donorChatsFragment;
     }
 
     @NonNull
@@ -95,6 +99,34 @@ public class DonorChatListAdapter extends FirestoreRecyclerAdapter<ChatroomModel
                     .addOnFailureListener(v -> {
                         AndroidUtil.setToast(context, "Something went wrong");
                     });
+
+
+            holder.userChatItem.setOnLongClickListener(v -> {
+                //set the dialog box for remove the chat
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setCancelable(true)
+                        .setIcon(R.drawable.profile_chat_icon)
+                        .setMessage("Do you really want to delete chat!!")
+                        .setTitle("Delete chat")
+                        .setPositiveButton("Delete", ((dialog1, which) -> {
+                            dialog1.dismiss();
+                            FirebaseUtil.getChatroomReference(model.getChatroomId()).delete().addOnSuccessListener(v2 -> {
+                                        AndroidUtil.setToast(context, "Chat Removed Successfully");
+                                        //reload the chatlist and also reload the chat page to check the new items
+                                        DonorChatListAdapter.this.notifyDataSetChanged();
+                                        donorChatsFragment.reload();
+                                    })
+                                    .addOnFailureListener(v2 -> {
+                                        AndroidUtil.setToast(context, "Something went wrong");
+                                    });
+                        }))
+                        .setNegativeButton("Cancel", (dialog1, which) -> {
+                            dialog1.dismiss();
+                        }).show();
+
+                //default return #return type boolean
+                return false;
+            });
         }
         else{
             holder.userChatItem.setVisibility(View.GONE);

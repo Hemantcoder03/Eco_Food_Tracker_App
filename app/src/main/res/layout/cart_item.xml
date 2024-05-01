@@ -15,6 +15,7 @@
         android:layout_marginBottom="@dimen/_9sdp"
         app:cardCornerRadius="@dimen/_12sdp"
         app:cardElevation="@dimen/_5sdp"
+        android:id="@+id/cartCV"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

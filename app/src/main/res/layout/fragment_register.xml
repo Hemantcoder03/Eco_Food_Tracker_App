@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.RegisterFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,10 +15,11 @@
             android:layout_width="@dimen/_95sdp"
             android:layout_height="@dimen/_95sdp"
             android:layout_marginTop="@dimen/_20sdp"
+            android:contentDescription="@string/food_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/food_logo"/>
+            app:srcCompat="@drawable/food_logo" />
 
         <TextView
             android:id="@+id/textView10"
@@ -58,23 +59,6 @@
             app:layout_constraintStart_toStartOf="@+id/textView11"
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-<!--        <EditText-->
-<!--            android:id="@+id/registerName"-->
-<!--            android:layout_width="@dimen/_250sdp"-->
-<!--            android:layout_height="@dimen/_45sdp"-->
-<!--            android:layout_marginTop="@dimen/_13sdp"-->
-<!--            android:background="@drawable/edittext_background"-->
-<!--            android:drawableStart="@drawable/profile_btn"-->
-<!--            android:drawablePadding="@dimen/_13sdp"-->
-<!--            android:elevation="@dimen/_4sdp"-->
-<!--            android:ems="10"-->
-<!--            android:hint="@string/name"-->
-<!--            android:inputType="text"-->
-<!--            android:paddingStart="@dimen/_13sdp"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/textView13"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/textView13"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/textView13" />-->
-
         <EditText
             android:id="@+id/registerEmail"
             android:layout_width="@dimen/_250sdp"
@@ -93,55 +77,75 @@
             app:layout_constraintStart_toStartOf="@+id/textView13"
             app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
-        <EditText
-            android:id="@+id/registerPassword"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/registerPasswordLayout"
             android:layout_width="@dimen/_250sdp"
-            android:layout_height="@dimen/_45sdp"
+            android:layout_height="@dimen/_42sdp"
             android:layout_marginTop="@dimen/_13sdp"
             android:background="@drawable/edittext_background"
-            android:drawableStart="@drawable/password"
-            android:drawablePadding="@dimen/_13sdp"
+            android:backgroundTint="@color/white"
             android:elevation="@dimen/_8sdp"
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:paddingStart="@dimen/_13sdp"
-            android:paddingEnd="@dimen/_13sdp"
+            android:gravity="center_vertical"
+            app:boxBackgroundMode="none"
+            app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="@+id/registerEmail"
             app:layout_constraintStart_toStartOf="@+id/registerEmail"
-            app:layout_constraintTop_toBottomOf="@+id/registerEmail"/>
+            app:layout_constraintTop_toBottomOf="@+id/registerEmail"
+            app:passwordToggleEnabled="true">
 
-        <EditText
-            android:id="@+id/registerConfirmPassword"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/registerPassword"
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="@dimen/_42sdp"
+                android:drawableStart="@drawable/password"
+                android:drawablePadding="@dimen/_10sdp"
+                android:ems="10"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/gray" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/registerConfirmPasswordLayout"
             android:layout_width="@dimen/_250sdp"
-            android:layout_height="@dimen/_45sdp"
+            android:layout_height="@dimen/_42sdp"
             android:layout_marginTop="@dimen/_13sdp"
             android:background="@drawable/edittext_background"
-            android:drawableStart="@drawable/password"
-            android:drawablePadding="@dimen/_13sdp"
+            android:backgroundTint="@color/white"
             android:elevation="@dimen/_8sdp"
-            android:ems="10"
-            android:hint="@string/confirm_password"
-            android:inputType="textPassword"
-            android:paddingStart="@dimen/_13sdp"
-            android:paddingEnd="@dimen/_13sdp"
-            app:layout_constraintEnd_toEndOf="@+id/registerPassword"
-            app:layout_constraintStart_toStartOf="@+id/registerPassword"
-            app:layout_constraintTop_toBottomOf="@+id/registerPassword" />
+            android:gravity="center_vertical"
+            app:boxBackgroundMode="none"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="@+id/registerPasswordLayout"
+            app:layout_constraintStart_toStartOf="@+id/registerPasswordLayout"
+            app:layout_constraintTop_toBottomOf="@+id/registerPasswordLayout"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/registerConfirmPassword"
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="@dimen/_42sdp"
+                android:drawableStart="@drawable/password"
+                android:drawablePadding="@dimen/_10sdp"
+                android:ems="10"
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/gray" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/registerBtn"
             android:layout_width="@dimen/_130sdp"
             android:layout_height="@dimen/_45sdp"
+            android:layout_marginTop="@dimen/_15sdp"
             android:background="@drawable/green_btn_background"
             android:fontFamily="sans-serif-medium"
             android:text="@string/register"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:layout_marginTop="@dimen/_13sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registerConfirmPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/registerConfirmPasswordLayout" />
 
         <TextView
             android:id="@+id/alreadyAccountBtn"
@@ -166,26 +170,18 @@
             android:elevation="@dimen/_8sdp"
             android:paddingStart="@dimen/_13sdp"
             android:text="@string/google"
+            app:layout_constraintEnd_toEndOf="@+id/alreadyAccountBtn"
             app:layout_constraintStart_toStartOf="@+id/alreadyAccountBtn"
-            app:layout_constraintTop_toBottomOf="@+id/alreadyAccountBtn"
-            app:layout_constraintEnd_toEndOf="@+id/alreadyAccountBtn"/>
+            app:layout_constraintTop_toBottomOf="@+id/alreadyAccountBtn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_100sdp"
-            android:id="@+id/registerLoadingBar"
-            android:visibility="gone"
-            app:lottie_rawRes="@raw/loading_bar"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/registerLoadingBar"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/loading_bar" />
 
 </FrameLayout>

@@ -11,7 +11,13 @@ import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hemant.ecofoodtrackerapp.R;
+import com.hemant.ecofoodtrackerapp.donor.ui.activities.DonorMainActivity;
+import com.hemant.ecofoodtrackerapp.models.FoodDataModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
+import com.hemant.ecofoodtrackerapp.ui.activities.MainActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AndroidUtil implements ConnectionReceiver.ReceiverListener{
 
@@ -84,5 +90,35 @@ public class AndroidUtil implements ConnectionReceiver.ReceiverListener{
     @Override
     public void onNetworkChange(boolean isConnected) {
 
+    }
+
+    public static Map<String, Object> setFoodDetails(FoodDataModel foodDataModel) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("itemFoodName", foodDataModel.getItemFoodName());
+        data.put("itemDonorProfileId", foodDataModel.getItemDonorProfileId());
+        data.put("itemDonorNearbyLoc", foodDataModel.getItemDonorNearbyLoc());
+        data.put("itemDonateDate", foodDataModel.getItemDonateDate());
+        data.put("itemRateCount", foodDataModel.getItemRateCount());
+        data.put("itemDonorProfileImg", foodDataModel.getItemDonorProfileImg());
+        data.put("itemOrderStatus", foodDataModel.getItemOrderStatus());
+        data.put("itemOrderUid", foodDataModel.getItemOrderUid());
+        data.put("itemShortDesc", foodDataModel.getItemShortDesc());
+        data.put("itemExpiryTime", foodDataModel.getItemExpiryTime());
+        data.put("itemQuantity", foodDataModel.getItemQuantity());
+        data.put("itemFoodImage", foodDataModel.getItemFoodImage());
+        data.put("itemId", foodDataModel.getItemId());
+        return data;
+    }
+
+    public static void setIntentToMainActivity(Context context){
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public static void setIntentToDonorMainActivity(Context context){
+        Intent intent = new Intent(context, DonorMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }

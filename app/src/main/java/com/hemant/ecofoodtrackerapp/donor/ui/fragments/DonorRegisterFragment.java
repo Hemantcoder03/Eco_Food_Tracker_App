@@ -137,8 +137,6 @@ public class DonorRegisterFragment extends Fragment {
             public void onClick(View v) {
 
                 Navigation.findNavController(view).navigate(R.id.action_donorRegisterFragment_to_donorLoginFragment);
-//                startActivity(new Intent(requireActivity(), LoginActivity.class));
-//                requireActivity();
             }
         });
 

@@ -48,11 +48,11 @@
         android:layout_weight="1" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/removeFoodNoFoodText"
-        android:text="@string/no_food"
-        style="@style/FoodItemTextStyle"
+        android:text="@string/no_food_found"
         android:visibility="gone"
-        android:layout_gravity="center"/>
+        style="@style/FoodItemTextStyle"
+        android:gravity="center"/>
 </LinearLayout>

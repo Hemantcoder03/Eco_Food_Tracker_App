@@ -40,7 +40,7 @@ public class RemoveAndModifyFoodActivity extends AppCompatActivity {
         });
     }
 
-    private void setFoodData(){
+    private void setFoodData() {
 
         //integrate all pages like "Remove food", "Modify food"
 
@@ -51,23 +51,31 @@ public class RemoveAndModifyFoodActivity extends AppCompatActivity {
                         donorFoodList.add(model);
                     }
 
-                    if(Objects.requireNonNull(getIntent().getStringExtra("comeFromBtn")).equals("Remove")){
-                        binding.removeFoodPageTitle.setText(R.string.remove_food);
-
-                        adapter = new RemoveAndModifyFoodAdapter(this,donorFoodList,donorFoodRefList,"Remove");
+                    if (Objects.requireNonNull(getIntent().getStringExtra("comeFromBtn")).equals("Remove")) {
+                        try {
+                            binding.removeFoodPageTitle.setText(R.string.remove_food);
+                            adapter = new RemoveAndModifyFoodAdapter(this, donorFoodList, donorFoodRefList, "Remove");
+                        } catch (Exception ignored) {
+                        }
+                    } else if (Objects.requireNonNull(getIntent().getStringExtra("comeFromBtn")).equals("Modify")) {
+                        try {
+                            binding.removeFoodPageTitle.setText(R.string.modify_food);
+                            adapter = new RemoveAndModifyFoodAdapter(this, donorFoodList, donorFoodRefList, "Modify");
+                        } catch (Exception ignored) {
+                        }
                     }
-                    else if(Objects.requireNonNull(getIntent().getStringExtra("comeFromBtn")).equals("Modify")){
-                        binding.removeFoodPageTitle.setText(R.string.modify_food);
 
-                        adapter = new RemoveAndModifyFoodAdapter(this,donorFoodList,donorFoodRefList,"Modify");
+                    if(adapter != null){
+                        binding.removeFoodRV.setLayoutManager(new LinearLayoutManager(this));
+                        binding.removeFoodRV.setAdapter(adapter);
+                        binding.removeFoodProgressBar.setVisibility(View.GONE);
                     }
-                    binding.removeFoodRV.setLayoutManager(new LinearLayoutManager(this));
-                    binding.removeFoodRV.setAdapter(adapter);
-                    binding.removeFoodProgressBar.setVisibility(View.GONE);
 
                     //if it is empty then show "no food" text
-                    if(donorFoodList.isEmpty()){
-                        binding.removeFoodNoFoodText.setVisibility(View.VISIBLE);
+                    if (donorFoodList.isEmpty()) {
+                        try{
+                            binding.removeFoodNoFoodText.setVisibility(View.VISIBLE);
+                        }catch (Exception ignored){}
                     }
                 })
                 .addOnFailureListener(v -> {
@@ -84,6 +92,12 @@ public class RemoveAndModifyFoodActivity extends AppCompatActivity {
         donorFoodList.clear();
         donorFoodRefList.clear();
         setFoodData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override

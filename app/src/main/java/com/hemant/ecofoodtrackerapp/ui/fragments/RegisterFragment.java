@@ -27,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.databinding.FragmentRegisterBinding;
 import com.hemant.ecofoodtrackerapp.models.LocationModel;
@@ -138,8 +139,6 @@ public class RegisterFragment extends Fragment {
         binding.alreadyAccountBtn.setOnClickListener(v-> {
 
                 Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_loginFragment);
-//                startActivity(new Intent(requireActivity(), LoginActivity.class));
-//                requireActivity();
         });
 
         // Inflate the layout for requireActivity() fragment
@@ -226,6 +225,9 @@ public class RegisterFragment extends Fragment {
 
     private void saveToDB(String name, String email){
 
+        //set up firebase notification and add subscription to topic
+        setUpFirebaseNotification();
+
         sharedPref = requireActivity().getSharedPreferences("My_Pref",0)  ;
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("userEmail",email);
@@ -233,6 +235,18 @@ public class RegisterFragment extends Fragment {
         editor.apply();
 
         FirebaseUtil.setCurrentUserDetails(new UserDataModel(name,email, FirebaseUtil.getCurrentUserId(),"","","Receiver", Timestamp.now(),new LocationModel(),""));
+    }
+
+    private void setUpFirebaseNotification(){
+
+        //set the subscription for particular topic like youtube
+        FirebaseMessaging.getInstance().subscribeToTopic("NewFoodAdded")
+                .addOnSuccessListener(v ->{
+                    AndroidUtil.setLog("checkError","notification subscribed");
+                })
+                .addOnFailureListener(v ->{
+                    AndroidUtil.setLog("checkError","fail to notification subscribe");
+                });
     }
     
     private void hideLoadingBar(){

@@ -3,11 +3,13 @@ package com.hemant.ecofoodtrackerapp.ui.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hemant.ecofoodtrackerapp.databinding.ActivityFoodDescBinding;
+import com.hemant.ecofoodtrackerapp.donor.ui.activities.DonorMainActivity;
 import com.hemant.ecofoodtrackerapp.models.CartModel;
 import com.hemant.ecofoodtrackerapp.models.FoodDataModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
@@ -26,16 +28,39 @@ public class FoodDescActivity extends AppCompatActivity {
         binding = ActivityFoodDescBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.foodDescBackBtn.setOnClickListener(v -> {
+        String donorId = getIntent().getStringExtra("donorId");
+        String foodId = getIntent().getStringExtra("foodId");
 
-            startActivity(new Intent(this, MainActivity.class));
-        });
+        //check whether from it coming if coming from donor side then hide "order" btn, and "add to cart" btn
+        if(getIntent().getStringExtra("comingFrom") != null){
+            if(getIntent().getStringExtra("comingFrom").equals("DonorHistory")){
+                binding.foodDescOrderBtn.setVisibility(View.GONE);
+                binding.foodDescAddToCartBtn.setVisibility(View.GONE);
+                binding.foodDescSendToChatBtn.setVisibility(View.GONE);
+                binding.foodDescBackBtn.setOnClickListener(v ->{
+                    startActivity(new Intent(this, DonorMainActivity.class));
+                });
+            }
+            else if(getIntent().getStringExtra("comingFrom").equals("TrackOrder")){
+                binding.foodDescOrderBtn.setVisibility(View.GONE);
+                binding.foodDescAddToCartBtn.setVisibility(View.GONE);
+                binding.foodDescSendToChatBtn.setVisibility(View.GONE);
+                binding.foodDescBackBtn.setOnClickListener(v ->{
+                    startActivity(new Intent(this, MainActivity.class));
+                });
+            }
+        }
+        else{
+            binding.foodDescBackBtn.setOnClickListener(v ->{
+                startActivity(new Intent(this, MainActivity.class));
+            });
+        }
 
         binding.foodDescSendToChatBtn.setOnClickListener(v -> {
+
             Intent intent = new Intent(this, MainChatActivity.class);
             FirebaseFirestore.getInstance().collection("Donors")
-                    .document("klvf3uYi05RCfPZukZMLISEOP9k2")
-//                    .document(Objects.requireNonNull(getIntent().getStringExtra("donorId")))
+                    .document(donorId)
                     .get()
                     .addOnSuccessListener(v2 -> {
                         UserDataModel model = v2.toObject(UserDataModel.class);
@@ -52,24 +77,26 @@ public class FoodDescActivity extends AppCompatActivity {
                     });
         });
 
-        String foodId = getIntent().getStringExtra("foodId");
-
         FirebaseFirestore.getInstance().collection("Foods")
-                .document(String.valueOf(foodId))
+                .document(foodId)
                 .get().addOnSuccessListener(v -> {
                     FoodDataModel model = v.toObject(FoodDataModel.class);
                     if (model != null) {
-                        binding.foodName.setText(model.getItemFoodName());
-                        Picasso.get().load(Uri.parse(model.getItemFoodImage())).into(binding.foodDescImage);
-                        //add food name with the quantity
-                        binding.foodDescQltyFoodNames.setText(model.getItemFoodName() + " x " + model.getItemQuantity());
-                        binding.foodDescExpiryTime.setText(model.getItemExpiryTime());
+                        try{
+                            binding.foodDescFoodName.setText(model.getItemFoodName());
+                            Picasso.get().load(Uri.parse(model.getItemFoodImage())).into(binding.foodDescImage);
+                            //add food name with the quantity
+                            binding.foodDescQltyFoodNames.setText(model.getItemFoodName() + " x " + model.getItemQuantity());
+                            binding.foodDescExpiryTime.setText(model.getItemExpiryTime());
 
-                        //set on click listener for food add to cart button then it used for make order
-                        binding.foodDescAddToCartBtn.setOnClickListener(v1 -> {
-                            //set to cart
-                            FirebaseUtil.setCartsDetails(new CartModel(model.getItemId(), model.getItemOrderStatus(), FirebaseUtil.getCurrentUserId()), binding.getRoot(), model.getItemId());
-                        });
+                            //set on click listener for food add to cart button then it used for make order
+                            binding.foodDescAddToCartBtn.setOnClickListener(v1 -> {
+                                //set to cart
+                                FirebaseUtil.setCartsDetails(new CartModel(model.getItemId(), model.getItemOrderStatus(), FirebaseUtil.getCurrentUserId()), binding.getRoot(), model.getItemId()+" "+FirebaseUtil.getCurrentUserId());
+                            });
+                        }
+                        catch (Exception ignored){
+                        }
                     } else {
                         AndroidUtil.setToast(this, "Something went wrong");
                     }
@@ -77,12 +104,30 @@ public class FoodDescActivity extends AppCompatActivity {
                 .addOnFailureListener(v -> {
                     AndroidUtil.setToast(this, "Something went wrong");
                 });
+
+        binding.foodDescOrderBtn.setOnClickListener(v ->{
+            //send to order procedure
+            Intent intent = new Intent(this, DeliveryOptionsActivity.class);
+            intent.putExtra("donorId",donorId);
+            intent.putExtra("foodId",foodId);
+            startActivity(intent);
+        });
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(this, MainActivity.class));
+        if(getIntent().getStringExtra("comingFrom") != null){
+            if(getIntent().getStringExtra("comingFrom").equals("DonorHistory")){
+                    AndroidUtil.setIntentToDonorMainActivity(FoodDescActivity.this);
+            }
+            else if(getIntent().getStringExtra("comingFrom").equals("TrackOrder")){
+                AndroidUtil.setIntentToMainActivity(FoodDescActivity.this);
+            }
+        }
+        else{
+            AndroidUtil.setIntentToMainActivity(FoodDescActivity.this);
+        }
     }
 
     @Override

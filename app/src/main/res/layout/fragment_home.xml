@@ -28,20 +28,23 @@
                     android:id="@+id/searchFood"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_30sdp"
-                    android:layout_margin="@dimen/_2sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
                     android:layout_weight="1"
                     android:background="@drawable/search_border"
                     app:iconifiedByDefault="false"
                     app:queryHint="@string/search_here" />
 
-                <ImageButton
-                    android:id="@+id/searchFilterBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_30sdp"
-                    android:background="@color/transparent"
-                    android:padding="@dimen/_5sdp"
-                    android:contentDescription="@string/filter_button"
-                    android:src="@drawable/filter_icon" />
+<!--                <ImageButton-->
+<!--                    android:id="@+id/searchFilterBtn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="@dimen/_30sdp"-->
+<!--                    android:background="@color/transparent"-->
+<!--                    android:contentDescription="@string/filter_button"-->
+<!--                    android:padding="@dimen/_5sdp"-->
+<!--                    android:src="@drawable/filter_icon" />-->
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -51,22 +54,23 @@
                 android:layout_margin="@dimen/_5sdp" />
 
             <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loadingAnimation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/loadingAnimation"
+                android:visibility="gone"
                 app:lottie_autoPlay="false"
                 app:lottie_loop="true"
-                app:lottie_rawRes="@raw/loading_spoon"
-                android:visibility="gone"/>
-
-<!--            <ProgressBar-->
-<!--                android:id="@+id/loadingAnimation"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:visibility="gone"-->
-<!--                android:layout_gravity="center" />-->
+                app:lottie_rawRes="@raw/loading_spoon" />
         </LinearLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <TextView
+        android:id="@+id/noFoodFoundText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/no_food_found"
+        android:textSize="@dimen/_13sdp"
+        android:visibility="gone" />
 </FrameLayout>

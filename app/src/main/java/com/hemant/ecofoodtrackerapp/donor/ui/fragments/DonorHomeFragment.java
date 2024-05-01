@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import com.hemant.ecofoodtrackerapp.databinding.FragmentDonorHomeBinding;
 import com.hemant.ecofoodtrackerapp.donor.ui.activities.AddFoodActivity;
+import com.hemant.ecofoodtrackerapp.donor.ui.activities.DonorTrackOrderActivity;
 import com.hemant.ecofoodtrackerapp.donor.ui.activities.RemoveAndModifyFoodActivity;
 
 public class DonorHomeFragment extends Fragment {
@@ -42,6 +43,11 @@ public class DonorHomeFragment extends Fragment {
         binding.donorModifyFoodBtn.setOnClickListener(v ->{
             Intent intent = new Intent(requireActivity(), RemoveAndModifyFoodActivity.class);
             intent.putExtra("comeFromBtn","Modify");
+            startActivity(intent);
+        });
+
+        binding.donorHistoryFoodBtn.setOnClickListener(v ->{
+            Intent intent = new Intent(requireActivity(), DonorTrackOrderActivity.class);
             startActivity(intent);
         });
 

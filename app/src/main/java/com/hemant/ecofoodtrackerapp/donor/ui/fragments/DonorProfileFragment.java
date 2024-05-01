@@ -1,6 +1,5 @@
 package com.hemant.ecofoodtrackerapp.donor.ui.fragments;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,10 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.databinding.FragmentDonorProfileBinding;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
-import com.hemant.ecofoodtrackerapp.ui.activities.HistoryActivity;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 
@@ -67,22 +69,27 @@ public class DonorProfileFragment extends Fragment {
         });
 
         binding.donorProfileChatBtn.setOnClickListener(v ->{
-//            NavController navController = Navigation.findNavController(requireView());
-//            navController.navigate(R.id.action_profileFragment_to_chatsFragment);
+            //firstly replace the fragment content
+            replaceFragment(new DonorChatsFragment());
 
-//            Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_chatsFragment);
-            requireActivity().finish();
+            //then set the bottom navigation selected item
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.donorBottomNav);
+            bottomNavigationView.setSelectedItemId(R.id.donorChatMenu);
         });
 
         binding.donorProfileHistoryBtn.setOnClickListener(v ->{
-            startActivity(new Intent(requireActivity(), HistoryActivity.class));
-        });
+            //firstly replace the fragment content
+            replaceFragment(new DonorHistoryFragment());
 
+            //then set the bottom navigation selected item
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.donorBottomNav);
+            bottomNavigationView.setSelectedItemId(R.id.donorHistoryMenu);
+        });
 
         // Inflate the layout for this fragment
         return view;
     }
-    public void setUpdatedDonorInformation(){
+    private void setUpdatedDonorInformation(){
         //set the updated data
         FirebaseUtil.getCurrentDonorDetails().get().addOnCompleteListener(task->{
                 if (task.isSuccessful()) {
@@ -97,10 +104,16 @@ public class DonorProfileFragment extends Fragment {
                     else{
                         Log.d("checkError","data not found");
                     }
-
                 } else {
-                    AndroidUtil.setToast(requireActivity(), "Please check your internet connection");
+                    AndroidUtil.setToast(requireActivity().getApplicationContext(), "Please check your internet connection");
                 }
         });
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentManager manager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.fragmentContainerView,fragment);
+        transaction.commit();
     }
 }

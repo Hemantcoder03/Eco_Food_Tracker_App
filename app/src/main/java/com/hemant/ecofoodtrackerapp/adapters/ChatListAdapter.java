@@ -2,7 +2,6 @@ package com.hemant.ecofoodtrackerapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,10 +21,12 @@ import com.hemant.ecofoodtrackerapp.models.ChatMessageModel;
 import com.hemant.ecofoodtrackerapp.models.ChatroomModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 import com.hemant.ecofoodtrackerapp.ui.activities.MainChatActivity;
+import com.hemant.ecofoodtrackerapp.ui.fragments.ChatsFragment;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -32,10 +34,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ChatListAdapter extends FirestoreRecyclerAdapter<ChatroomModel, ChatListAdapter.MyViewHolder> {
 
     Context context;
+    ChatsFragment chatsFragment;
 
-    public ChatListAdapter(@NonNull FirestoreRecyclerOptions<ChatroomModel> options, Context context) {
+    public ChatListAdapter(@NonNull FirestoreRecyclerOptions<ChatroomModel> options, Context context, ChatsFragment chatsFragment) {
         super(options);
         this.context = context;
+        this.chatsFragment = chatsFragment;
     }
 
     @NonNull
@@ -49,7 +53,7 @@ public class ChatListAdapter extends FirestoreRecyclerAdapter<ChatroomModel, Cha
     protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull ChatroomModel model) {
 
         //check whether the chat for current user or not
-        if(model.getUserIds().get(0).equals(FirebaseUtil.getCurrentUserId()) && !model.getChatroomId().isEmpty()){
+        if (model.getUserIds().get(0).equals(FirebaseUtil.getCurrentUserId()) && !model.getChatroomId().isEmpty()) {
 
             //query to get the last message from the "chats" endpoint
             Query query = FirebaseUtil.getChatroomMessageReference(model.getChatroomId()).orderBy("timestamp", Query.Direction.DESCENDING).limit(1);
@@ -73,7 +77,7 @@ public class ChatListAdapter extends FirestoreRecyclerAdapter<ChatroomModel, Cha
                                             holder.chatMessageTime.setText(format.format(model.getLastMessageTimestamp().toDate()));
 
                                             //set click listener for chat item
-                                            holder.userChatItem.setOnClickListener(v3 ->{
+                                            holder.userChatItem.setOnClickListener(v3 -> {
                                                 //also send the data as intent to the mainchatactivity page
                                                 Intent intent = new Intent(context, MainChatActivity.class);
                                                 AndroidUtil.setIntentForUserDataModel(intent, userDataModel);
@@ -94,8 +98,34 @@ public class ChatListAdapter extends FirestoreRecyclerAdapter<ChatroomModel, Cha
                     .addOnFailureListener(v -> {
                         AndroidUtil.setToast(context, "Something went wrong");
                     });
-        }
-        else{
+
+            holder.userChatItem.setOnLongClickListener(v -> {
+                //set the dialog box for remove the chat
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setCancelable(true)
+                        .setIcon(R.drawable.profile_chat_icon)
+                        .setMessage("Do you really want to delete chat!!")
+                        .setTitle("Delete chat")
+                        .setPositiveButton("Delete", ((dialog1, which) -> {
+                            dialog1.dismiss();
+                            FirebaseUtil.getChatroomReference(model.getChatroomId()).delete().addOnSuccessListener(v2 -> {
+                                        AndroidUtil.setToast(context, "Chat Removed Successfully");
+                                        //reload the chatlist and also reload the chat page to check the new items
+                                        ChatListAdapter.this.notifyDataSetChanged();
+                                        chatsFragment.reload();
+                                    })
+                                    .addOnFailureListener(v2 -> {
+                                        AndroidUtil.setToast(context, "Something went wrong");
+                                    });
+                        }))
+                        .setNegativeButton("Cancel", (dialog1, which) -> {
+                            dialog1.dismiss();
+                        }).show();
+
+                //default return #return type boolean
+                return false;
+            });
+        } else {
             holder.userChatItem.setVisibility(View.GONE);
         }
     }
@@ -103,7 +133,7 @@ public class ChatListAdapter extends FirestoreRecyclerAdapter<ChatroomModel, Cha
     static class MyViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView chatSenderImage;
-        TextView chatSenderName, chatLastMessage,chatMessageTime;
+        TextView chatSenderName, chatLastMessage, chatMessageTime;
         CardView userChatItem;
 
         public MyViewHolder(@NonNull View itemView) {

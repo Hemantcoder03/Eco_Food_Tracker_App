@@ -76,41 +76,62 @@
             app:layout_constraintStart_toStartOf="@+id/text2"
             app:layout_constraintTop_toBottomOf="@+id/text2" />
 
-        <EditText
-            android:id="@+id/donorRegisterPassword"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/donorRegisterPasswordLayout"
             android:layout_width="@dimen/_250sdp"
-            android:layout_height="@dimen/_41sdp"
+            android:layout_height="@dimen/_42sdp"
             android:layout_marginTop="@dimen/_13sdp"
             android:background="@drawable/edittext_background"
-            android:drawableStart="@drawable/lock_icon"
-            android:drawablePadding="@dimen/_13sdp"
+            android:backgroundTint="@color/white"
             android:elevation="@dimen/_8sdp"
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:paddingStart="@dimen/_13sdp"
+            android:gravity="center_vertical"
+            app:boxBackgroundMode="none"
+            app:hintEnabled="false"
             app:layout_constraintEnd_toEndOf="@+id/donorRegisterEmail"
             app:layout_constraintStart_toStartOf="@+id/donorRegisterEmail"
             app:layout_constraintTop_toBottomOf="@+id/donorRegisterEmail"
-            tools:ignore="RtlSymmetry" />
-        
-        <EditText
-            android:id="@+id/donorRegisterConPassword"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/donorRegisterPassword"
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="@dimen/_42sdp"
+                android:drawableStart="@drawable/password"
+                android:drawablePadding="@dimen/_10sdp"
+                android:ems="10"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/gray" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/donorRegisterConPasswordLayout"
             android:layout_width="@dimen/_250sdp"
-            android:layout_height="@dimen/_41sdp"
+            android:layout_height="@dimen/_42sdp"
             android:layout_marginTop="@dimen/_13sdp"
             android:background="@drawable/edittext_background"
-            android:drawableStart="@drawable/lock_icon"
-            android:drawablePadding="@dimen/_13sdp"
+            android:backgroundTint="@color/white"
             android:elevation="@dimen/_8sdp"
-            android:ems="10"
-            android:hint="@string/confirm_password"
-            android:inputType="textPassword"
-            android:paddingStart="@dimen/_13sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/donorRegisterPassword"
-            tools:ignore="RtlSymmetry" />
+            android:gravity="center_vertical"
+            app:boxBackgroundMode="none"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="@+id/donorRegisterPasswordLayout"
+            app:layout_constraintStart_toStartOf="@+id/donorRegisterPasswordLayout"
+            app:layout_constraintTop_toBottomOf="@+id/donorRegisterPasswordLayout"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/donorRegisterConPassword"
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="@dimen/_42sdp"
+                android:drawableStart="@drawable/password"
+                android:drawablePadding="@dimen/_10sdp"
+                android:ems="10"
+                android:hint="@string/confirm_password"
+                android:inputType="textPassword"
+                android:textColorHint="@color/gray" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/donorRegisterBtn"
@@ -125,7 +146,7 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/donorRegisterConPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/donorRegisterConPasswordLayout" />
 
 
         <TextView

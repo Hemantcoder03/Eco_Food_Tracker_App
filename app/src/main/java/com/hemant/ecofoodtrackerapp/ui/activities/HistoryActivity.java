@@ -1,23 +1,24 @@
 package com.hemant.ecofoodtrackerapp.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hemant.ecofoodtrackerapp.adapters.CartAdapter;
+import com.hemant.ecofoodtrackerapp.adapters.HistoryAdapter;
 import com.hemant.ecofoodtrackerapp.databinding.ActivityHistoryBinding;
-import com.hemant.ecofoodtrackerapp.models.CartModel;
-
-import java.util.ArrayList;
+import com.hemant.ecofoodtrackerapp.models.FoodOrderModel;
+import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
 
 public class HistoryActivity extends AppCompatActivity {
 
     ActivityHistoryBinding binding;
-    CartAdapter adapter;
+    HistoryAdapter adapter;
+    CollectionReference ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,23 +26,41 @@ public class HistoryActivity extends AppCompatActivity {
         binding = ActivityHistoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Maggi");
+        ref = FirebaseFirestore.getInstance().collection("Orders");
 
-
-        FirestoreRecyclerOptions<CartModel> options =
-                new FirestoreRecyclerOptions.Builder<CartModel>()
-                        .setQuery(FirebaseFirestore.getInstance().collection("Carts"), CartModel.class)
+        //pickup delivery type data
+        FirestoreRecyclerOptions<FoodOrderModel> options =
+                new FirestoreRecyclerOptions.Builder<FoodOrderModel>()
+                        .setQuery(ref, FoodOrderModel.class)
                         .build();
 
-        adapter = new CartAdapter(options, this);
+        adapter = new HistoryAdapter(options, this,HistoryActivity.this,null,"History");
         binding.historyRV.setLayoutManager(new LinearLayoutManager(this));
         binding.historyRV.setAdapter(adapter);
 
-        binding.historyBackBtn.setOnClickListener(v ->{
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+        //check the food item present in list or not
+        ref.addSnapshotListener(((value, error) -> {
+            if(value != null && value.isEmpty()){
+                showNoFoodText();
+            }
+        }));
+
+        binding.historyBackBtn.setOnClickListener(v -> {
+            AndroidUtil.setIntentToMainActivity(HistoryActivity.this);
         });
+    }
+
+    public void showNoFoodText() {
+        try {
+            binding.historyConstraint.setVisibility(View.VISIBLE);
+        } catch (Exception ignored) {
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        AndroidUtil.setIntentToMainActivity(HistoryActivity.this);
     }
 
     @Override

@@ -11,140 +11,219 @@
         android:layout_height="match_parent">
 
     <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:columnCount="2">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:layout_gravity="center">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_100sdp"
-            android:orientation="vertical"
+        <androidx.cardview.widget.CardView
             android:id="@+id/donorAddFoodBtn"
-            android:layout_columnWeight="1"
-            android:layout_margin="@dimen/_10sdp"
-            android:gravity="center"
-            android:background="@drawable/donorcard">
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_90sdp"
+            android:elevation="@dimen/_6sdp"
+            android:layout_margin="@dimen/_15sdp"
+            android:outlineSpotShadowColor="@color/donorColor"
+            app:cardCornerRadius="@dimen/_16sdp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:src="@drawable/alt_add_icon" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/donor_cardview_background">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/add_food"
-                android:textColor="@color/donorColor"
-                android:textSize="@dimen/_15sdp" />
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/add_food_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_100sdp"
-            android:orientation="vertical"
-            android:layout_columnWeight="1"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/add_food"
+                    android:textColor="@color/donorColor"
+                    android:textSize="@dimen/_15sdp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/donorRemoveFoodBtn"
-            android:layout_margin="@dimen/_10sdp"
-            android:gravity="center"
-            android:background="@drawable/donorcard">
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_90sdp"
+            android:elevation="@dimen/_6sdp"
+            android:layout_margin="@dimen/_15sdp"
+            android:outlineSpotShadowColor="@color/donorColor"
+            app:cardCornerRadius="@dimen/_16sdp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:src="@drawable/alt_add_icon" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/donor_cardview_background">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/remove_food"
-                android:textColor="@color/donorColor"
-                android:textSize="@dimen/_15sdp" />
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/remove_food_image"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/remove_food"
+                    android:textColor="@color/donorColor"
+                    android:textSize="@dimen/_15sdp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_100sdp"
-            android:orientation="vertical"
-            android:layout_columnWeight="1"
+        <androidx.cardview.widget.CardView
             android:id="@+id/donorModifyFoodBtn"
-            android:layout_margin="@dimen/_10sdp"
-            android:gravity="center"
-            android:background="@drawable/donorcard">
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_90sdp"
+            android:elevation="@dimen/_6sdp"
+            android:layout_margin="@dimen/_15sdp"
+            android:outlineSpotShadowColor="@color/donorColor"
+            app:cardCornerRadius="@dimen/_16sdp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:src="@drawable/alt_add_icon" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/donor_cardview_background">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/modify_food"
-                android:textColor="@color/donorColor"
-                android:textSize="@dimen/_15sdp" />
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/modify_food_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_100sdp"
-            android:orientation="vertical"
-            android:layout_columnWeight="1"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/modify_food"
+                    android:textColor="@color/donorColor"
+                    android:textSize="@dimen/_15sdp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/donorRewardFoodBtn"
+            android:layout_width="@dimen/_120sdp"
+            android:layout_margin="@dimen/_15sdp"
+            android:layout_height="@dimen/_90sdp"
+            android:elevation="@dimen/_6sdp"
+            android:outlineSpotShadowColor="@color/donorColor"
+            app:cardCornerRadius="@dimen/_16sdp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/donor_cardview_background">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/reward_food_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/rewards"
+                    android:textColor="@color/donorColor"
+                    android:textSize="@dimen/_15sdp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
             android:id="@+id/donorHistoryFoodBtn"
-            android:layout_margin="@dimen/_10sdp"
-            android:gravity="center"
-            android:background="@drawable/donorcard">
+            android:layout_width="@dimen/_120sdp"
+            android:layout_margin="@dimen/_15sdp"
+            android:layout_height="@dimen/_90sdp"
+            android:elevation="@dimen/_6sdp"
+            android:outlineSpotShadowColor="@color/donorColor"
+            app:cardCornerRadius="@dimen/_16sdp">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:src="@drawable/alt_add_icon" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@drawable/donor_cardview_background">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/history"
-                android:textColor="@color/donorColor"
-                android:textSize="@dimen/_15sdp" />
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/history_food_icon"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_100sdp"
-            android:orientation="vertical"
-            android:id="@+id/donorRewardsFoodBtn"
-            android:layout_columnWeight="1"
-            android:layout_margin="@dimen/_10sdp"
-            android:gravity="center"
-            android:background="@drawable/donorcard">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/history"
+                    android:textColor="@color/donorColor"
+                    android:textSize="@dimen/_15sdp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:src="@drawable/alt_add_icon" />
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="@dimen/_120sdp"-->
+<!--            android:layout_height="@dimen/_90sdp"-->
+<!--            android:layout_margin="@dimen/_15sdp"-->
+<!--            android:elevation="@dimen/_6sdp"-->
+<!--            android:outlineSpotShadowColor="@color/donorColor"-->
+<!--            app:cardCornerRadius="@dimen/_16sdp">-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/rewards"
-                android:textColor="@color/donorColor"
-                android:textSize="@dimen/_15sdp" />
-        </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:gravity="center"-->
+<!--                android:background="@drawable/donor_cardview_background">-->
+
+<!--                <ImageView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:src="@drawable/remove_food_image"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="@dimen/_10sdp"-->
+<!--                    android:fontFamily="sans-serif-medium"-->
+<!--                    android:text="@string/remove_food"-->
+<!--                    android:textColor="@color/donorColor"-->
+<!--                    android:textSize="@dimen/_15sdp" />-->
+<!--            </LinearLayout>-->
+<!--        </androidx.cardview.widget.CardView>-->
 
     </GridLayout>
     </ScrollView>

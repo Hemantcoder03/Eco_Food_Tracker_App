@@ -92,13 +92,6 @@ public class MainChatActivity extends AppCompatActivity implements ConnectionRec
                     if (task.isSuccessful()) {
                         binding.mainChatProgressBar.setVisibility(View.GONE);
                         binding.mainChatTextInput.setText("");
-                        //when create an chatroom add last message add message and also add other details
-//                        Map<String, Object> chatMap = new HashMap<>();
-//                        chatMap.put("chatDonorLastMessage",msg);
-//                        FirebaseUtil.getLastMsgReference(chatroomId).document("lastMsg").update(chatMap)
-//                                .addOnFailureListener(v3 -> {
-//                                    AndroidUtil.setToast(MainChatActivity.this, "Something went wrong");
-//                                });
                     }
                 });
     }

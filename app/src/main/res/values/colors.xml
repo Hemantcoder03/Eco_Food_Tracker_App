@@ -12,4 +12,9 @@
     <color name="donorColor">#1F1FFF</color>
     <color name="red">#FF0000</color>
     <color name="green">#28D30B</color>
+    <color name="reddish">#C55A67</color>
+    <color name="blue">#03A9F4</color>
+    <color name="orange">#FF9800</color>
+    <color name="cyan">#00BCD4</color>
+    <color name="light_gray">#DEE1E0</color>
 </resources>

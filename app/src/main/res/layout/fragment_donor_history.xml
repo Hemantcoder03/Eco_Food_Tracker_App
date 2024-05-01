@@ -5,10 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".donor.ui.fragments.DonorHistoryFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/donorHistoryRV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/history" />
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/noDonorHistoryFoodFoundText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/no_food_found"
+        android:textSize="@dimen/_13sdp"
+        android:visibility="gone" />
 
 </FrameLayout>

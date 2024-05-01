@@ -6,16 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.adapters.ChatListAdapter;
 import com.hemant.ecofoodtrackerapp.databinding.FragmentChatsBinding;
 import com.hemant.ecofoodtrackerapp.models.ChatroomModel;
@@ -29,6 +27,7 @@ public class ChatsFragment extends Fragment {
     ChatListAdapter chatListAdapter;
     View view;
     FirebaseFirestore db;
+    Boolean isVisible = false;
 
     public ChatsFragment() {
         // Required empty public constructor
@@ -50,27 +49,29 @@ public class ChatsFragment extends Fragment {
                 .setQuery(query, ChatroomModel.class)
                 .build();
 
-        //check whether any chat is present if not then show the no chat found text
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if(value.isEmpty()){
-                    binding.chatNoChatFound.setVisibility(View.VISIBLE);
-                }
-                else {
-                    query.get().addOnSuccessListener(v -> {
-                        List<ChatroomModel> model = v.toObjects(ChatroomModel.class);
-                        for (ChatroomModel chatroomModel : model) {
-                            if (!chatroomModel.getUserIds().get(0).equals(FirebaseUtil.getCurrentUserId())) {
-                                binding.chatNoChatFound.setVisibility(View.VISIBLE);
+        //check whether any item is present if not then show the no chat item found text
+        query.addSnapshotListener((value, error) -> {
+            if (value != null && value.isEmpty()) {
+                noFoundTextVisible();
+            } else {
+                query.get().addOnSuccessListener(v -> {
+                    List<ChatroomModel> model = v.toObjects(ChatroomModel.class);
+                    for (ChatroomModel chatroomModel : model) {
+
+                        if(!isVisible){
+                            if (chatroomModel.getUserIds().get(0).equals(FirebaseUtil.getCurrentUserId())) {
+                                //check the last item and then adjust visibility
+                                noFoundTextGone();
+                            } else {
+                                noFoundTextVisible();
                             }
                         }
-                    });
-                }
+                    }
+                });
             }
         });
 
-        chatListAdapter = new ChatListAdapter(options, requireActivity());
+        chatListAdapter = new ChatListAdapter(options, requireActivity(), ChatsFragment.this);
         binding.chatRV.setLayoutManager(new LinearLayoutManager(requireActivity()));
         binding.chatRV.setAdapter(chatListAdapter);
         binding.chatsListProgressBar.setVisibility(View.GONE);
@@ -78,16 +79,37 @@ public class ChatsFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        binding = null;
+    public void reload(){
+        FragmentTransaction tr = getFragmentManager().beginTransaction();
+        tr.replace(R.id.frame, new ChatsFragment());
+        tr.commit();
+    }
+
+    private void noFoundTextVisible() {
+        try {
+            binding.chatNoChatFound.setVisibility(View.VISIBLE);
+            isVisible = false;
+        } catch (Exception ignored) {
+
+        }
+    }
+
+    private void noFoundTextGone() {
+        try {
+            binding.chatNoChatFound.setVisibility(View.GONE);
+            isVisible = true;
+        } catch (Exception ignored) {
+
+        }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        chatListAdapter.startListening();
+        //check the visibility of no found chat text to check chat present or not
+        if(binding.chatNoChatFound.getVisibility() != View.VISIBLE){
+            chatListAdapter.startListening();
+        }
     }
 
     @Override
@@ -100,5 +122,11 @@ public class ChatsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         chatListAdapter.startListening();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

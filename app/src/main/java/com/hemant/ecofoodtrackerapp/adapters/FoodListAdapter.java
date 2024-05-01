@@ -14,36 +14,68 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.models.FoodDataModel;
 import com.hemant.ecofoodtrackerapp.models.LocationModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 import com.hemant.ecofoodtrackerapp.ui.activities.FoodDescActivity;
+import com.hemant.ecofoodtrackerapp.ui.fragments.HomeFragment;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FoodListAdapter extends FirestoreRecyclerAdapter<FoodDataModel, FoodListAdapter.MyViewHolder> {
+public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.MyViewHolder> {
 
     Context context;
+    HomeFragment homeFragment;
+    ArrayList<FoodDataModel> foodList;
+    Boolean noFoodFoundText = false;
 
-    public FoodListAdapter(@NonNull FirestoreRecyclerOptions<FoodDataModel> options, Context context) {
-        super(options);
+    public FoodListAdapter(Context context, HomeFragment homeFragment, ArrayList<FoodDataModel> foodList) {
         this.context = context;
+        this.homeFragment = homeFragment;
+        this.foodList = foodList;
+
+        //first check the "no ordered" item is present or not
+        for(FoodDataModel orderModel : foodList){
+            if(orderModel.getItemOrderStatus().equals("not ordered")){
+                noFoodFoundText = true;
+            }
+        }
     }
+//    public FoodListAdapter(@NonNull FirestoreRecyclerOptions<FoodDataModel> options, Context context, HomeFragment homeFragment) {
+//        super(options);
+//        this.context = context;
+//        this.homeFragment = homeFragment;
+//    }
 
     @Override
-    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull FoodDataModel model) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        FoodDataModel model = foodList.get(position);
+
+        //check the not ordered food if ordered then hide
+        if (!Objects.equals(model.getItemOrderStatus(), "not ordered")) {
+            holder.foodItemLayout.setVisibility(View.GONE);
+            homeFragment.setNoFoundTextGone();
+        }
+
+        if(noFoodFoundText){
+            homeFragment.setNoFoundTextGone();
+        }
+        else{
+            homeFragment.setNoFoundTextVisible();
+        }
 
         //set the near by location of user and donor food location
-        try{
+        try {
             FirebaseUtil.getCurrentUserDetails().get().addOnSuccessListener(v -> {
                         UserDataModel userDataModel = v.toObject(UserDataModel.class);
-                        if(userDataModel != null){
+                        if (userDataModel != null) {
 
                             //find the distance between two locations
                             LocationModel locationModel = model.getItemDonorNearbyLoc();
@@ -67,17 +99,15 @@ public class FoodListAdapter extends FirestoreRecyclerAdapter<FoodDataModel, Foo
                                     holder.itemDonorNearbyLoc.setText(formattedNumber + " m");
                                 }
                             }
-                        }
-                        else{
+                        } else {
                             AndroidUtil.setToast(context, "Please check your internet connection");
                         }
                     })
                     .addOnFailureListener(v -> {
                         AndroidUtil.setToast(context, "Please check your internet connection");
                     });
-        }
-        catch (Exception e){
-            AndroidUtil.setLog("checkError","error");
+        } catch (Exception e) {
+            AndroidUtil.setLog("checkError", "error");
         }
 
 
@@ -95,17 +125,23 @@ public class FoodListAdapter extends FirestoreRecyclerAdapter<FoodDataModel, Foo
             }
         });
         holder.itemFoodName.setText(model.getItemFoodName());
-        Picasso.get().load(Uri.parse(model.getItemFoodImage()))
-                .into(holder.itemFoodImg);
-
+        if (model.getItemFoodImage() != null) {
+            Picasso.get().load(Uri.parse(model.getItemFoodImage()))
+                    .into(holder.itemFoodImg);
+        }
         holder.itemDonateDate.setText(model.getItemDonateDate());
         holder.itemRateCount.setText(model.getItemRateCount());
         holder.foodItemLayout.setOnClickListener(v -> {
             Intent intent = new Intent(context, FoodDescActivity.class);
-            intent.putExtra("donorId",model.getItemDonorProfileId());
+            intent.putExtra("donorId", model.getItemDonorProfileId());
             intent.putExtra("foodId", model.getItemId());
             context.startActivity(intent);
         });
+    }
+
+    @Override
+    public int getItemCount() {
+        return foodList.size();
     }
 
     @NonNull
@@ -136,8 +172,23 @@ public class FoodListAdapter extends FirestoreRecyclerAdapter<FoodDataModel, Foo
         }
     }
 
-    public void reloadAdapter() {
-        notifyDataSetChanged();
-    }
+    public ArrayList<FoodDataModel> search(String searchTerm) {
 
+        ArrayList<FoodDataModel> list = new ArrayList<>();
+
+        if (!searchTerm.isEmpty()) {
+            list.clear();
+            for (FoodDataModel model : foodList) {
+                //set search filter
+                if (model.getItemFoodName().toLowerCase().contains(searchTerm.toLowerCase())) {
+                    list.add(model);
+                }
+            }
+        } else {
+            //default set complete list
+            list = foodList;
+        }
+        notifyDataSetChanged();
+        return list;
+    }
 }

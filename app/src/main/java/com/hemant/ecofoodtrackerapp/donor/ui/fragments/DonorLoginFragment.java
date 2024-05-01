@@ -65,9 +65,9 @@ public class DonorLoginFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.action_donorLoginFragment_to_donorRegisterFragment);
         });
 
-        binding.loginForgetPassword.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.action_donorLoginFragment_to_donorForgotPasswordFragment);
-        });
+//        binding.loginForgetPassword.setOnClickListener(v -> {
+//            Navigation.findNavController(view).navigate(R.id.action_donorLoginFragment_to_donorForgotPasswordFragment);
+//        });
 
         binding.loginGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override

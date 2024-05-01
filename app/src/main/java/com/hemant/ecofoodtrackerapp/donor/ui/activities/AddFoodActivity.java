@@ -7,9 +7,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,6 +42,9 @@ import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -78,7 +87,7 @@ public class AddFoodActivity extends AppCompatActivity {
             });
 
             binding.donorAddFoodBtn.setOnClickListener(v -> {
-                addFoodToDB();
+                addFoodToDB(v);
             });
         }
         //this code run when click on modify food item
@@ -97,11 +106,13 @@ public class AddFoodActivity extends AppCompatActivity {
                             binding.donorFoodExpiryTime.setText(model.getItemExpiryTime());
                             binding.donorAddFoodBtn.setText(R.string.modify_food);
                             binding.addFoodBackBtn.setOnClickListener(v1 -> {
-                                finish();
+                                Intent intent = new Intent(AddFoodActivity.this, DonorMainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
                             });
 
                             binding.donorAddFoodBtn.setOnClickListener(v2 -> {
-                                modifyFoodToDB();
+                                modifyFoodToDB(v2);
                             });
                         } else {
                             AndroidUtil.setToast(this, "Something went wrong");
@@ -121,7 +132,7 @@ public class AddFoodActivity extends AppCompatActivity {
         });
     }
 
-    private void addFoodToDB() {
+    private void addFoodToDB(View v) {
 
         if (binding.donorAddFoodNameEt.getText().toString().equals("")) {
             binding.donorAddFoodNameEt.setError("Enter the FOOD NAME");
@@ -129,6 +140,9 @@ public class AddFoodActivity extends AppCompatActivity {
         } else if (binding.donorAddFoodQuantityEt.getText().toString().equals("")) {
             binding.donorAddFoodQuantityEt.setError("Enter the FOOD QUANTITY");
             AndroidUtil.setToast(this, "Enter the food quantity");
+        } else if (getFoodImageUri() == null) {
+            binding.donorAddFoodImage.setError("Add food Image");
+            AndroidUtil.setToast(this, "Please add Food Image");
         } else {
             FoodDataModel model = new FoodDataModel();
             model.setItemFoodName(binding.donorAddFoodNameEt.getText().toString());
@@ -145,23 +159,30 @@ public class AddFoodActivity extends AppCompatActivity {
             Pair<String, DocumentReference> foodIdPair = FirebaseUtil.getFoodDocumentRefDetails();
             String foodUniqueId = foodIdPair.first;
 
-            model.setItemId(String.valueOf(foodUniqueId+""+FirebaseUtil.getCurrentUserId()));
+            model.setItemId(foodUniqueId + "" + FirebaseUtil.getCurrentUserId());
             FirebaseUtil.getCurrentDonorDetails().get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     UserDataModel userDataModel = task.getResult().toObject(UserDataModel.class);
                     if (userDataModel != null) {
                         model.setItemDonorProfileId(userDataModel.getUserId());
-                        Map<String, Object> foodDetails = FirebaseUtil.setFoodDetails(model);
+                        Map<String, Object> foodDetails = AndroidUtil.setFoodDetails(model);
                         foodIdPair.second.set(foodDetails).addOnCompleteListener(v1 -> {
                             if (v1.isSuccessful()) {
-                                AndroidUtil.setSuccessSnackBar(findViewById(R.id.cartFoodImage),"Food Added Successfully");
-                                finish();
+
+                                //set the notification for receiver
+                                sendFoodAddedNotification();
+                                AndroidUtil.setSuccessSnackBar(v,"Food Added Successfully");
+                                //set delay for loading main activity to show snack-bar
+                                new Handler().postDelayed(() -> {
+                                    Intent intent = new Intent(AddFoodActivity.this, DonorMainActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                },2000);
                             } else {
-                                AndroidUtil.setFailedSnackBar(findViewById(R.id.cartFoodImage),"Something went wrong");
+                                AndroidUtil.setFailedSnackBar(v,"Something went wrong");
                             }
                         });
                     } else {
-                        Log.d("checkError", "username error");
                         AndroidUtil.setToast(this, "Something went wrong");
                     }
                 } else {
@@ -171,7 +192,43 @@ public class AddFoodActivity extends AppCompatActivity {
         }
     }
 
-    public void modifyFoodToDB() {
+    private void sendFoodAddedNotification() {
+
+        String cloudApiKey = "AAAAIxPADkM:APA91bGLyOEfRgqGdA-70Mi8eRK2eZmjJEJ1oPrSPVkznjR1M622q7D9TqorG7vNspphlvpxyE5BIsobuJWt4jz2p17ZmBmEz41-PPI2vmqgc-fVDyOm58xfIQ2NXEjAPAt6Z9xpa64q";
+        String topic = "NewFoodAdded";
+
+        RequestQueue mRequestQue = Volley.newRequestQueue(this);
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("to", "/topics/" + topic);
+            JSONObject notificationObj = new JSONObject();
+            notificationObj.put("title", "Eco Food Tracker App");
+            notificationObj.put("body", "New Food Added, Order Now!!");
+            json.put("notification", notificationObj);
+
+            String URL = "https://fcm.googleapis.com/fcm/send";
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,
+                    json,
+                    response -> Log.d("checkError", "onResponse: " + response.toString()),
+                    error -> Log.d("checkError", "onError: " + error.networkResponse)
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> header = new HashMap<>();
+                    header.put("content-type", "application/json");
+                    header.put("authorization", "key=" + cloudApiKey);
+                    return header;
+                }
+            };
+
+            mRequestQue.add(request);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void modifyFoodToDB(View v2) {
         if (binding.donorAddFoodNameEt.getText().toString().equals("")) {
             binding.donorAddFoodNameEt.setError("Enter the FOOD NAME");
             AndroidUtil.setToast(this, "Enter the food name");
@@ -185,7 +242,7 @@ public class AddFoodActivity extends AppCompatActivity {
             map.put("itemQuantity", Integer.parseInt(binding.donorAddFoodQuantityEt.getText().toString()));
             map.put("itemShortDesc", binding.donorAddFoodDesc.getText().toString());
             map.put("itemExpiryTime", binding.donorFoodExpiryTime.getText().toString());
-            if(bitmap != null){
+            if (bitmap != null) {
                 map.put("itemFoodImage", getFoodImageUri());
             }
             map.put("itemDonorNearbyLoc", getCurrentLocation());
@@ -193,11 +250,16 @@ public class AddFoodActivity extends AppCompatActivity {
                     .document(Objects.requireNonNull(getIntent().getStringExtra("foodRef")))
                     .update(map)
                     .addOnSuccessListener(v -> {
-                        finish();
-                        AndroidUtil.setToast(this, "Food updated successfully");
+                        AndroidUtil.setSuccessSnackBar(v2,"Food updated successfully");
+                        //set delay for loading main activity to show snack-bar
+                        new Handler().postDelayed(() ->{
+                                Intent intent = new Intent(AddFoodActivity.this, DonorMainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                        },2000);
                     })
                     .addOnFailureListener(v -> {
-                        AndroidUtil.setToast(this, "Something went wrong");
+                        AndroidUtil.setFailedSnackBar(v2, "Something went wrong");
                     });
         }
     }

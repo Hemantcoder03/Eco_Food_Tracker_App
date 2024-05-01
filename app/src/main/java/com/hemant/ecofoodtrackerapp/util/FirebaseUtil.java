@@ -10,7 +10,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hemant.ecofoodtrackerapp.models.CartModel;
-import com.hemant.ecofoodtrackerapp.models.FoodDataModel;
 import com.hemant.ecofoodtrackerapp.models.LocationModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 
@@ -20,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FirebaseUtil {
+
     //used for both
     public static String getCurrentUserId() {
         return FirebaseAuth.getInstance().getUid();
@@ -54,14 +54,14 @@ public class FirebaseUtil {
         });
     }
 
-    public static void updateCurrentUserDetails(String userName, String userPhone, String userAddress) {
+    public static Boolean updateCurrentUserDetails(String userName, String userPhone, String userAddress) {
 
         Map<String, Object> data = new HashMap<>();
         data.put("userName", userName);
         data.put("userPhone", userPhone);
         data.put("userAddress", userAddress);
 
-        getCurrentUserDetails().update(data);
+        return getCurrentUserDetails().update(data).isSuccessful();
     }
 
     public static void setUserCurrentLocation(Context context, LocationModel location) {
@@ -75,6 +75,12 @@ public class FirebaseUtil {
                 AndroidUtil.setToast(context, "Please check your internet connection");
             }
         });
+    }
+
+    //order
+    public static DocumentReference setOrderFoodRef(String orderId){
+
+        return FirebaseFirestore.getInstance().collection("Orders").document(orderId);
     }
 
 
@@ -149,30 +155,12 @@ public class FirebaseUtil {
     }
 
     public static void removeCartFoodUsingRef(View view, String ref) {
-        FirebaseFirestore.getInstance().collection("Carts").document(ref).delete().addOnSuccessListener(v -> {
+        FirebaseFirestore.getInstance().collection("Carts").document(ref+" "+FirebaseUtil.getCurrentUserId()).delete().addOnSuccessListener(v -> {
                     AndroidUtil.setSuccessSnackBar(view, "Food removed from cart successfully");
                 })
                 .addOnFailureListener(v -> {
                     AndroidUtil.setFailedSnackBar(view, "Something went wrong");
                 });
-    }
-
-    public static Map<String, Object> setFoodDetails(FoodDataModel foodDataModel) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("itemFoodName", foodDataModel.getItemFoodName());
-        data.put("itemDonorProfileId", foodDataModel.getItemDonorProfileId());
-        data.put("itemDonorNearbyLoc", foodDataModel.getItemDonorNearbyLoc());
-        data.put("itemDonateDate", foodDataModel.getItemDonateDate());
-        data.put("itemRateCount", foodDataModel.getItemRateCount());
-        data.put("itemDonorProfileImg", foodDataModel.getItemDonorProfileImg());
-        data.put("itemOrderStatus", foodDataModel.getItemOrderStatus());
-        data.put("itemOrderUid", foodDataModel.getItemOrderUid());
-        data.put("itemShortDesc", foodDataModel.getItemShortDesc());
-        data.put("itemExpiryTime", foodDataModel.getItemExpiryTime());
-        data.put("itemQuantity", foodDataModel.getItemQuantity());
-        data.put("itemFoodImage", foodDataModel.getItemFoodImage());
-        data.put("itemId", foodDataModel.getItemId());
-        return data;
     }
 
     public static void setDonorCurrentLocation(Context context, LocationModel location) {
@@ -187,5 +175,4 @@ public class FirebaseUtil {
             }
         });
     }
-
 }

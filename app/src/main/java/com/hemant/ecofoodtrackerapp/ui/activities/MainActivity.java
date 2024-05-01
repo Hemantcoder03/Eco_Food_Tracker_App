@@ -6,14 +6,15 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
@@ -32,6 +33,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.hemant.ecofoodtrackerapp.R;
+import com.hemant.ecofoodtrackerapp.SplashScreenActivity;
 import com.hemant.ecofoodtrackerapp.databinding.ActivityMainBinding;
 import com.hemant.ecofoodtrackerapp.models.LocationModel;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
@@ -70,24 +72,50 @@ public class MainActivity extends AppCompatActivity {
         bottomNav = findViewById(R.id.bottomNav);
         toolbarTitle = findViewById(R.id.toolbarTitle);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.POST_NOTIFICATIONS},101);
+            }
+            return;
+        }
+
         setUserName();
 
         //set side navigation bar item selected listener
         binding.sideNav.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
 
-            if (id == R.id.home) {
-                Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
-            } else if (id == R.id.map) {
-                Toast.makeText(MainActivity.this, "map", Toast.LENGTH_SHORT).show();
-            } else if (id == R.id.chat) {
-                Toast.makeText(MainActivity.this, "chat", Toast.LENGTH_SHORT).show();
-            } else if (id == R.id.profile) {
-                Toast.makeText(MainActivity.this, "profile", Toast.LENGTH_SHORT).show();
-            } else if (id == R.id.helpSupport) {
-                Toast.makeText(MainActivity.this, "help and support", Toast.LENGTH_SHORT).show();
-            } else if (id == R.id.theme) {
-                Toast.makeText(MainActivity.this, "Theme", Toast.LENGTH_SHORT).show();
+            if (id == R.id.trackOrderBtn) {
+                startActivity(new Intent(this, TrackOrderActivity.class));
+            } else if (id == R.id.aboutBtn) {
+                startActivity(new Intent(this, AboutActivity.class));
+            } else if (id == R.id.termsAndConditionsBtn) {
+                startActivity(new Intent(this, TermsAndConditionsActivity.class));
+            } else if (id == R.id.logout) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                        .setCancelable(false)
+                        .setIcon(R.drawable.logout_icon)
+                        .setTitle("Logout")
+                        .setMessage("Do you really want to logout ?")
+                        .setPositiveButton("Logout",((dialog, which) -> {
+                            startActivity(new Intent(this, SplashScreenActivity.class));
+                            finish();
+                            //logout from device
+                            mAuth.signOut();
+                        }))
+                        .setNegativeButton("Cancel",((dialog, which) -> {
+                            dialog.dismiss();
+                        }));
+
+                //create and show the dialog
+                builder.create();
+                builder.show();
+            }
+            else if (id == R.id.feedback) {
+                startActivity(new Intent(MainActivity.this, FeedBackActivity.class));
+            }
+            else if (id == R.id.helpSupport) {
+                startActivity(new Intent(MainActivity.this, HelpAndSupportActivity.class));
             }
             return true;
         });
@@ -126,11 +154,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        try{
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
         }
+        catch (Exception ignored){}
+        //close app
+        MainActivity.this.finish();
     }
 
     public void loadFragment(Fragment fragment, boolean flag) {
@@ -146,6 +179,28 @@ public class MainActivity extends AppCompatActivity {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START);
         }
+    }
+
+    private void setUserName() {
+        FirebaseUtil.getCurrentUserDetails().get().addOnCompleteListener(v -> {
+
+            if (v.isSuccessful()) {
+                UserDataModel user = v.getResult().toObject(UserDataModel.class);
+                String userName;
+                if (user != null) {
+                    userName = user.getUserName();
+                    if (userName.length() > 10) {
+                        toolbarTitle.setText(getString(R.string.hello) + " " + userName.substring(0, 10) + "...");
+                    } else {
+                        toolbarTitle.setText(getString(R.string.hello) + " " + userName);
+                    }
+                } else {
+                    AndroidUtil.setToast(this, "Please check your internet connection");
+                }
+            } else {
+                AndroidUtil.setToast(this, "Please check your internet connection");
+            }
+        });
     }
 
     @Override
@@ -187,28 +242,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setUserName() {
-        FirebaseUtil.getCurrentUserDetails().get().addOnCompleteListener(v -> {
-
-            if (v.isSuccessful()) {
-                UserDataModel user = v.getResult().toObject(UserDataModel.class);
-                String userName;
-                if (user != null) {
-                    userName = user.getUserName();
-                    if (userName.length() > 10) {
-                        toolbarTitle.setText(getString(R.string.hello) + " " + userName.substring(0, 10) + "...");
-                    } else {
-                        toolbarTitle.setText(getString(R.string.hello) + " " + userName);
-                    }
-                } else {
-                    AndroidUtil.setToast(this, "Please check your internet connection");
-                }
-            } else {
-                AndroidUtil.setToast(this, "Please check your internet connection");
-            }
-        });
-    }
-
     private void requestNewLocationData() {
 
         // Initializing LocationRequest
@@ -238,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
 
     @Override
     protected void onDestroy() {

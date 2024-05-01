@@ -1,5 +1,6 @@
 package com.hemant.ecofoodtrackerapp.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -24,6 +25,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.databinding.FragmentLoginBinding;
 import com.hemant.ecofoodtrackerapp.ui.activities.MainActivity;
@@ -47,6 +49,7 @@ public class LoginFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,9 +69,9 @@ public class LoginFragment extends Fragment {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_registerFragment);
         });
 
-        binding.loginForgetPassword.setOnClickListener(v -> {
-            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_forgotPasswordFragment);
-        });
+//        binding.loginForgetPassword.setOnClickListener(v -> {
+//            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_forgotPasswordFragment);
+//        });
 
         binding.loginGoogleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +109,7 @@ public class LoginFragment extends Fragment {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
                                         hideLoadingBar();
+                                        setUpFirebaseNotification();
                                         AndroidUtil.setToast(requireActivity(), "Login Successfully");
                                         Intent i = new Intent(requireActivity(), MainActivity.class);
                                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -125,7 +129,6 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
-
 
         // Inflate the layout for this fragment
         return view;
@@ -177,6 +180,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
+                            setUpFirebaseNotification();
                             AndroidUtil.setToast(requireActivity(), "Login successfully");
                             Intent i = new Intent(requireActivity(), MainActivity.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -210,6 +214,19 @@ public class LoginFragment extends Fragment {
         binding.loginLoadingBar.setVisibility(View.GONE);
         binding.loginLoadingBar.setImageDrawable(null);
     }
+
+    private void setUpFirebaseNotification(){
+
+        //set the subscription for particular topic like youtube
+        FirebaseMessaging.getInstance().subscribeToTopic("NewFoodAdded")
+                .addOnSuccessListener(v ->{
+                    AndroidUtil.setLog("checkError","notification subscribed");
+                })
+                .addOnFailureListener(v ->{
+                    AndroidUtil.setLog("checkError","fail to notification subscribe");
+                });
+    }
+
 
     @Override
     public void onDestroy() {

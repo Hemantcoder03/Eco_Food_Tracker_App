@@ -76,37 +76,46 @@
             app:layout_constraintStart_toStartOf="@+id/text2"
             app:layout_constraintTop_toBottomOf="@+id/text2" />
 
-        <EditText
-            android:id="@+id/donorLoginPassword"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="@dimen/_250sdp"
-            android:layout_height="@dimen/_41sdp"
-            android:layout_marginTop="@dimen/_13sdp"
+            android:layout_height="@dimen/_42sdp"
             android:background="@drawable/edittext_background"
-            android:drawableStart="@drawable/lock_icon"
-            android:drawablePadding="@dimen/_13sdp"
+            android:backgroundTint="@color/white"
+            android:id="@+id/donorLoginPasswordLayout"
+            android:layout_marginTop="@dimen/_13sdp"
             android:elevation="@dimen/_8sdp"
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:paddingStart="@dimen/_13sdp"
+            app:hintEnabled="false"
+            app:boxBackgroundMode="none"
+            android:gravity="center_vertical"
             app:layout_constraintEnd_toEndOf="@+id/donorLoginEmail"
             app:layout_constraintStart_toStartOf="@+id/donorLoginEmail"
             app:layout_constraintTop_toBottomOf="@+id/donorLoginEmail"
-            tools:ignore="RtlSymmetry" />
+            app:passwordToggleEnabled="true">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="@dimen/_42sdp"
+                android:id="@+id/donorLoginPassword"
+                android:ems="10"
+                android:textColorHint="@color/gray"
+                android:drawablePadding="@dimen/_10sdp"
+                android:drawableStart="@drawable/password"
+                android:hint="@string/password"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/loginForgetPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:text="@string/forget_password"
-            android:textColor="@color/textColor"
-            android:textSize="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_20sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/donorLoginPassword" />
+<!--        <TextView-->
+<!--            android:id="@+id/loginForgetPassword"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fontFamily="sans-serif-medium"-->
+<!--            android:text="@string/forget_password"-->
+<!--            android:textColor="@color/textColor"-->
+<!--            android:textSize="@dimen/_12sdp"-->
+<!--            android:layout_marginTop="@dimen/_5sdp"-->
+<!--            android:layout_marginEnd="@dimen/_20sdp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/donorLoginPasswordLayout" />-->
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/donorLoginBtn"
@@ -121,7 +130,7 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginForgetPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/donorLoginPasswordLayout" />
 
         <TextView
             android:id="@+id/textView12"
@@ -175,25 +184,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView8"/>
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <com.airbnb.lottie.LottieAnimationView
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_100sdp"
-                android:id="@+id/donorLoginLoadingBar"
-                android:visibility="gone"
-                app:lottie_rawRes="@raw/loading_bar"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:id="@+id/donorLoginLoadingBar"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/loading_bar"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:layout_gravity="center"/>
 
 </FrameLayout>
