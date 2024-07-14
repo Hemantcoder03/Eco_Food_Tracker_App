@@ -17,6 +17,7 @@ import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.databinding.FragmentProfileBinding;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
 import com.hemant.ecofoodtrackerapp.ui.activities.HistoryActivity;
+import com.hemant.ecofoodtrackerapp.ui.activities.SettingsActivity;
 import com.hemant.ecofoodtrackerapp.ui.activities.UpdateProfileActivity;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
@@ -94,6 +95,10 @@ public class ProfileFragment extends Fragment {
 
         binding.profileHistoryLayout.setOnClickListener(v ->{
             startActivity(new Intent(requireActivity(), HistoryActivity.class));
+        });
+
+        binding.profileSettingsLayout.setOnClickListener(v ->{
+            startActivity(new Intent(requireActivity(), SettingsActivity.class));
         });
 
 

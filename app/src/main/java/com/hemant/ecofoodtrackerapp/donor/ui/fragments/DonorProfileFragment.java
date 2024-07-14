@@ -1,5 +1,6 @@
 package com.hemant.ecofoodtrackerapp.donor.ui.fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hemant.ecofoodtrackerapp.R;
 import com.hemant.ecofoodtrackerapp.databinding.FragmentDonorProfileBinding;
 import com.hemant.ecofoodtrackerapp.models.UserDataModel;
+import com.hemant.ecofoodtrackerapp.ui.activities.SettingsActivity;
 import com.hemant.ecofoodtrackerapp.util.AndroidUtil;
 import com.hemant.ecofoodtrackerapp.util.FirebaseUtil;
 
@@ -84,6 +86,10 @@ public class DonorProfileFragment extends Fragment {
             //then set the bottom navigation selected item
             BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.donorBottomNav);
             bottomNavigationView.setSelectedItemId(R.id.donorHistoryMenu);
+        });
+
+        binding.donorProfileSettingsLayout.setOnClickListener(v ->{
+            startActivity(new Intent(requireActivity(), SettingsActivity.class));
         });
 
         // Inflate the layout for this fragment

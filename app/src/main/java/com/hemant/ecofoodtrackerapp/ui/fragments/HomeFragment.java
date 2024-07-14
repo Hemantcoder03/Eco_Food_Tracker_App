@@ -82,8 +82,11 @@ public class HomeFragment extends Fragment {
                         FoodDataModel model = snapshots.toObject(FoodDataModel.class);
                         foodList.add(model);
                     }
-                    foodListAdapter = new FoodListAdapter(requireActivity(), HomeFragment.this, foodList);
-                    binding.foodListRV.setAdapter(foodListAdapter);
+                    try{
+                        foodListAdapter = new FoodListAdapter(requireActivity(), HomeFragment.this, foodList);
+                        binding.foodListRV.setAdapter(foodListAdapter);
+                    }
+                    catch (Exception ignored){}
                 } else {
                     AndroidUtil.setToast(requireActivity(), "Please check your internet connection");
                 }

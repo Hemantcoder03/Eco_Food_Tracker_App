@@ -133,7 +133,6 @@ public class DonorLoginFragment extends Fragment {
     private void signIn() {
         hideLoadingBar();
         Intent intent = googleClient.getSignInIntent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intent, REQ_ONE_TAP);
     }
 

@@ -188,6 +188,7 @@
                     android:text="@string/history"
                     android:textColor="@color/donorColor"
                     android:textSize="@dimen/_15sdp" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

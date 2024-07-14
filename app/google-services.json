@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "150655209027-1iso8d4eaua943a410dd7n3tu1mjfjhl.apps.googleusercontent.com",
+          "client_id": "150655209027-gqfsv6hdtk0mbnhs5vokv3ktmipt5rgn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.hemant.ecofoodtrackerapp",
-            "certificate_hash": "6ef1348e8e1768863f1ccbe87df04319254b9958"
+            "certificate_hash": "9d8d357b6c03d58c0c1e21fe9a304f180caa7c20"
           }
         },
         {

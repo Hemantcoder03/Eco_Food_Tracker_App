@@ -44,7 +44,7 @@ public class RegisterFragment extends Fragment {
     FirebaseAuth mAuth;     //firebase auth object which can used to check authentication
     GoogleSignInClient googleClient;
     GoogleSignInOptions gso;
-    String userEmail,userPassword, userConfirmPassword;
+    String userEmail, userPassword, userConfirmPassword;
     FirebaseFirestore db;
     SharedPreferences sharedPref;
     FragmentRegisterBinding binding;
@@ -54,6 +54,7 @@ public class RegisterFragment extends Fragment {
     public RegisterFragment() {
         // Required empty public constructor
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,7 +62,7 @@ public class RegisterFragment extends Fragment {
         binding = FragmentRegisterBinding.inflate(inflater, container, false);
         view = binding.getRoot();
 
-        sharedPref = requireActivity().getSharedPreferences("My_Pref",0);
+        sharedPref = requireActivity().getSharedPreferences("My_Pref", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
 
         db = FirebaseFirestore.getInstance();
@@ -73,7 +74,7 @@ public class RegisterFragment extends Fragment {
                 .build();
         googleClient = GoogleSignIn.getClient(requireActivity(), gso);
 
-        binding.registerBtn.setOnClickListener(new View.OnClickListener(){
+        binding.registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 binding.registerLoadingBar.setVisibility(View.VISIBLE);
@@ -81,47 +82,43 @@ public class RegisterFragment extends Fragment {
                 userEmail = String.valueOf(binding.registerEmail.getText());
                 userPassword = String.valueOf(binding.registerPassword.getText());
                 userConfirmPassword = String.valueOf(binding.registerConfirmPassword.getText());
-                if(userEmail.isEmpty() || userPassword.isEmpty()){
+                if (userEmail.isEmpty() || userPassword.isEmpty()) {
                     hideLoadingBar();
-                    AndroidUtil.setToast(requireActivity(),"Enter valid Details");
-                    if(userEmail.isEmpty())
+                    AndroidUtil.setToast(requireActivity(), "Enter valid Details");
+                    if (userEmail.isEmpty())
                         binding.registerEmail.setError("Please enter email");
                     else if (userPassword.isEmpty())
                         binding.registerPassword.setError("Please enter password");
                     else if (userConfirmPassword.isEmpty())
                         binding.registerPassword.setError("Please enter confirm password");
-                }
-                else if(!isValidEmail(userEmail)){
+                } else if (!isValidEmail(userEmail)) {
                     hideLoadingBar();
                     binding.registerEmail.setError("Please enter valid email\n E.g. abc@gmail.com");
-                }
-                else if(!isValidPassword(userPassword)){
+                } else if (!isValidPassword(userPassword)) {
                     hideLoadingBar();
                     binding.registerPassword.setError("Please enter valid password\n E.g. Abc@123");
-                }
-                else if(!userPassword.equals(userConfirmPassword)){
+                } else if (!userPassword.equals(userConfirmPassword)) {
                     hideLoadingBar();
                     binding.registerConfirmPassword.setError("Password not matching");
-                }
-                else{
-                    mAuth.createUserWithEmailAndPassword(userEmail,userPassword)
+                } else {
+
+                    mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if(task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         hideLoadingBar();
 
                                         //save to firebase
                                         //set the user as default name
                                         saveToDB("User", userEmail);
 
-                                        AndroidUtil.setToast(requireActivity(),"Registration Successfully");
+                                        AndroidUtil.setToast(requireActivity(), "Registration Successfully");
                                         Intent i = new Intent(requireActivity(), MainActivity.class);
-                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(i);
                                         requireActivity().finish();
-                                    }
-                                    else{
+                                    } else {
                                         hideLoadingBar();
                                         AndroidUtil.setToast(requireActivity(), "User Already Registered");
                                     }
@@ -131,14 +128,14 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        binding.registerGoogleBtn.setOnClickListener(v-> {
-                binding.registerLoadingBar.setVisibility(View.VISIBLE);
-                signUp();
+        binding.registerGoogleBtn.setOnClickListener(v -> {
+            binding.registerLoadingBar.setVisibility(View.VISIBLE);
+            signUp();
         });
 
-        binding.alreadyAccountBtn.setOnClickListener(v-> {
+        binding.alreadyAccountBtn.setOnClickListener(v -> {
 
-                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_loginFragment);
+            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_loginFragment);
         });
 
         // Inflate the layout for requireActivity() fragment
@@ -148,7 +145,6 @@ public class RegisterFragment extends Fragment {
     public void signUp() {
         hideLoadingBar();
         Intent intent = googleClient.getSignInIntent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intent, REQ_ONE_TAP);
     }
 
@@ -172,15 +168,15 @@ public class RegisterFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQ_ONE_TAP) {
+
             binding.registerLoadingBar.setVisibility(View.VISIBLE);
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-
-                GoogleSignInAccount account = task .getResult(ApiException.class);
+                GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (Exception e) {
                 hideLoadingBar();
-                AndroidUtil.setToast(requireActivity(),"Something went wrong");
+                AndroidUtil.setToast(requireActivity(), "Something went wrong " + e.getLocalizedMessage());
             }
         }
     }
@@ -195,19 +191,18 @@ public class RegisterFragment extends Fragment {
                             hideLoadingBar();
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-
                             //save to firebase
                             saveToDB(mAuth.getCurrentUser().getDisplayName(), mAuth.getCurrentUser().getEmail());
                             hideLoadingBar();
                             Intent i = new Intent(requireActivity(), MainActivity.class);
-                            AndroidUtil.setToast(requireActivity(),"Registration successfully");
+                            AndroidUtil.setToast(requireActivity(), "Registration successfully");
                             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(i);
                             requireActivity().finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             hideLoadingBar();
-                            AndroidUtil.setToast(requireActivity(),"Registration failed");
+                            AndroidUtil.setToast(requireActivity(), "Registration failed");
                         }
                     }
                 });
@@ -218,38 +213,38 @@ public class RegisterFragment extends Fragment {
         return pattern.matcher(password).matches();
     }
 
-    private Boolean isValidEmail(String email){
+    private Boolean isValidEmail(String email) {
         //It used default email address validation
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private void saveToDB(String name, String email){
+    private void saveToDB(String name, String email) {
 
         //set up firebase notification and add subscription to topic
         setUpFirebaseNotification();
 
-        sharedPref = requireActivity().getSharedPreferences("My_Pref",0)  ;
+        sharedPref = requireActivity().getSharedPreferences("My_Pref", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("userEmail",email);
-        editor.putString("userName",name);
+        editor.putString("userEmail", email);
+        editor.putString("userName", name);
         editor.apply();
 
-        FirebaseUtil.setCurrentUserDetails(new UserDataModel(name,email, FirebaseUtil.getCurrentUserId(),"","","Receiver", Timestamp.now(),new LocationModel(),""));
+        FirebaseUtil.setCurrentUserDetails(new UserDataModel(name, email, FirebaseUtil.getCurrentUserId(), "", "", "Receiver", Timestamp.now(), new LocationModel(), ""));
     }
 
-    private void setUpFirebaseNotification(){
+    private void setUpFirebaseNotification() {
 
         //set the subscription for particular topic like youtube
         FirebaseMessaging.getInstance().subscribeToTopic("NewFoodAdded")
-                .addOnSuccessListener(v ->{
-                    AndroidUtil.setLog("checkError","notification subscribed");
+                .addOnSuccessListener(v -> {
+                    AndroidUtil.setLog("checkError", "notification subscribed");
                 })
-                .addOnFailureListener(v ->{
-                    AndroidUtil.setLog("checkError","fail to notification subscribe");
+                .addOnFailureListener(v -> {
+                    AndroidUtil.setLog("checkError", "fail to notification subscribe");
                 });
     }
-    
-    private void hideLoadingBar(){
+
+    private void hideLoadingBar() {
         binding.registerLoadingBar.setVisibility(View.GONE);
         binding.registerLoadingBar.setImageDrawable(null);
     }

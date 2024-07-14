@@ -148,7 +148,6 @@ public class DonorRegisterFragment extends Fragment {
     public void signUp() {
         hideLoadingBar();
         Intent intent = googleClient.getSignInIntent();
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivityForResult(intent, REQ_ONE_TAP);
     }
 
